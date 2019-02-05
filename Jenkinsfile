@@ -20,7 +20,7 @@ pipeline {
 		stage('Checkout') {
 			steps{
 				echo "------------>Checkout<------------"
-				checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitHub_yepesalvarez', url: 'https://github.com/yepesalvarez/estacionamiento-ceiba.git']]])
+				checkout([$class: 'GitSCM', branches: [[name: 'develop']], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git_Centos', submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'GitHub_yepesalvarez', url: 'https://github.com/yepesalvarez/ceiba-adn.git']]])
 				sh 'gradle clean'
 			}
 		}
