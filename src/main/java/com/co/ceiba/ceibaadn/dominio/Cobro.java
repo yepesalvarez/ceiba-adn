@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -32,6 +33,7 @@ public class Cobro extends Entidad {
 	@JoinColumn(name = "parqueadero_fk", referencedColumnName = "id")
 	Parqueadero parqueadero;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vehiculo_fk", referencedColumnName = "id")
 	private Vehiculo vehiculo;
 

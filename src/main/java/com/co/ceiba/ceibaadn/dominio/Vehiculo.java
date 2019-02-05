@@ -2,6 +2,7 @@ package com.co.ceiba.ceibaadn.dominio;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -21,7 +22,7 @@ public abstract class Vehiculo extends Entidad {
 	@Size(max = 6)
 	private String placa;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipoVehiculo_fk", referencedColumnName = "id")
 	private TipoVehiculo tipoVehiculo;
 	

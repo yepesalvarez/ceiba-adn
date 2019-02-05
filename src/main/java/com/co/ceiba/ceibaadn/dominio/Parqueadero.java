@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -13,6 +14,8 @@ import javax.persistence.Table;
 @Table(name = "parqueadero")
 public class Parqueadero extends Entidad {
 
+	@OneToMany(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "parqueadero_fk")
 	private Set<Vehiculo> vehiculos;
 	
 	@OneToMany(mappedBy = "parqueadero",
