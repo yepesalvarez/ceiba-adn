@@ -16,6 +16,6 @@ public class CeibaAdnApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CeibaAdnApplication.class, args);
 	}
-	
+
 }
 

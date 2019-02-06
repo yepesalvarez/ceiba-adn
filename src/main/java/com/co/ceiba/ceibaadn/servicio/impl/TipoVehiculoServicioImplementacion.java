@@ -14,12 +14,12 @@ import com.co.ceiba.ceibaadn.servicio.excepciones.CeibaAdnServicioExcepcion;
 @Service
 public class TipoVehiculoServicioImplementacion implements TipoVehiculoServicio {
 	
-	public static final String TIPO_VEHICULO_DUPLICADO = "El tipo de vehiculo ya existe"; 
+	public static final String TIPO_VEHICULO_DUPLICADO = "El tipo de vehiculo ya existe";
+	
+	public static final Logger LOGGER = Logger.getLogger(TipoVehiculoServicioImplementacion.class);
 
 	@Autowired
 	TipoVehiculoRepositorio tipoVehiculoRepositorio;
-	
-	public static final Logger LOGGER = Logger.getLogger(TipoVehiculoServicioImplementacion.class);
 	
 	@Override
 	public List<TipoVehiculo> obtenerTodosTipoVehiculo() {

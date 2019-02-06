@@ -27,7 +27,13 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompile ('org.springframework.boot:spring-boot-starter-test'){
+		exclude group: "com.vaadin.external.google", module:"android-json"
+	}
+	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: "com.vaadin.external.google", module:"android-json"
+	}
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	compile group: 'org.json', name: 'json', version: '20090211'
 	compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
 }

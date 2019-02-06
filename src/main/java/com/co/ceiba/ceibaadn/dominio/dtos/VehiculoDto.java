@@ -7,6 +7,32 @@ public class VehiculoDto {
 	String tipoVehiculo;
 	int cilindraje;
 	
+	public VehiculoDto () {}
+	
+	public VehiculoDto (String placa, String tipoVehiculo) {
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+	}
+	
+	public VehiculoDto (String placa, String tipoVehiculo, int cilindraje) {
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+		this.cilindraje = cilindraje;
+	}
+	
+	public VehiculoDto (Long id, String placa, String tipoVehiculo) {
+		this.id = id;
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+	}
+	
+	public VehiculoDto (Long id, String placa, String tipoVehiculo, int cilindraje) {
+		this.id = id;
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+		this.cilindraje = cilindraje;
+	}
+	
 	public Long getId() {
 		return id;
 	}
