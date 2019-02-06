@@ -29,4 +29,5 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+	compile group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
 }

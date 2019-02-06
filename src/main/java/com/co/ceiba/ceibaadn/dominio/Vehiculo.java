@@ -1,30 +1,40 @@
 package com.co.ceiba.ceibaadn.dominio;
 
 import javax.persistence.Column;
+//import javax.persistence.DiscriminatorColumn;
+//import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@Entity(name = "vehiculo")
+@Entity
 @Table(name = "vehiculos")
-public abstract class Vehiculo extends Entidad {
-	
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class Vehiculo extends Entidad {
+
 	@Column(name = "placa", unique = true)
-	@NotNull
 	@Size(max = 6)
 	private String placa;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "tipoVehiculo_fk", referencedColumnName = "id")
 	private TipoVehiculo tipoVehiculo;
+	
+	public Vehiculo(String placa, TipoVehiculo tipoVehiculo) {
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+	}
+	
+	public Vehiculo() {}
 	
 	public String getPlaca() {
 		return placa;

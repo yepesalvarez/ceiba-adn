@@ -8,13 +8,20 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-@Entity(name = "moto")
-@Table(name = "vehiculos")
-public class Moto extends Vehiculo{
+@Entity
+@Table(name = "motos")
+public class Moto extends Vehiculo {
 
 	@Column(name = "cilindraje")
 	private int cilindraje;
-
+	
+	public Moto(String placa, TipoVehiculo tipoVehiculo, int cilindraje) {
+		super(placa, tipoVehiculo);
+		this.cilindraje = cilindraje;
+	}
+	
+	public Moto() {}
+	
 	public int getCilindraje() {
 		return cilindraje;
 	}
