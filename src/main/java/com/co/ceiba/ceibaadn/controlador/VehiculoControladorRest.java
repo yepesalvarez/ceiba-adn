@@ -14,7 +14,6 @@ import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.servicio.TipoVehiculoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
-//import com.co.ceiba.ceibaadn.servicio.VehiculoServicioFactory;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -25,9 +24,6 @@ public class VehiculoControladorRest extends AbstractControlador {
 	
 	@Autowired
 	private TipoVehiculoServicio tipoVehiculoServicio;
-	
-//	@Autowired
-//	private VehiculoServicioFactory vehiculoServicioFactory;
 	
 	@Autowired
 	private VehiculoServicio vehiculoServicio;
@@ -45,7 +41,6 @@ public class VehiculoControladorRest extends AbstractControlador {
 		
 		Vehiculo vehiculo;
 		
-		//VehiculoServicio vehiculoServicio = vehiculoServicioFactory.obtenerVehiculoServicio(tipoVehiculoString);
 		vehiculo = vehiculoServicio.obtenerVehiculoPorPlaca(placa);
 		if(vehiculo != null) {
 			return new ResponseEntity<>(getStatusConflict(), HttpStatus.CONFLICT);
