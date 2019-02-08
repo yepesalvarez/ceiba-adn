@@ -1,15 +1,12 @@
 package com.co.ceiba.ceibaadn.dominio;
 
 import javax.persistence.Column;
-//import javax.persistence.DiscriminatorColumn;
-//import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -17,9 +14,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@Table(name = "vehiculos")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Vehiculo extends Entidad {
+public abstract class Vehiculo extends Entidad {
 
 	@Column(name = "placa", unique = true)
 	@Size(max = 6)

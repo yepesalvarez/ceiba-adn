@@ -2,14 +2,12 @@ package com.co.ceiba.ceibaadn.dominio;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@Table(name = "motos")
 public class Moto extends Vehiculo {
 
 	@Column(name = "cilindraje")
