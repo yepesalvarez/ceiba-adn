@@ -53,29 +53,33 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 	@Override
 	public Vehiculo guardarVehiculo(VehiculoDto vehiculoDto) {
 		
-		String placa = vehiculoDto.getPlaca();
-		String tipoVehiculoString = vehiculoDto.getTipoVehiculo();
-		TipoVehiculo tipoVehiculo = tipoVehiculoServicio.obtenerPorNombre(tipoVehiculoString);
-		if ((placa == null || placa.equals("") || placa.length() > 6) || (tipoVehiculoString == null 
-				|| tipoVehiculoString.equals("")) || tipoVehiculo == null) {
+		try {
+			
+			String placa = vehiculoDto.getPlaca();
+			String tipoVehiculoString = vehiculoDto.getTipoVehiculo();
+			TipoVehiculo tipoVehiculo = tipoVehiculoServicio.obtenerPorNombre(tipoVehiculoString);
+			if ((placa.equals("") || placa.length() > 6) || (tipoVehiculoString.equals("")) || tipoVehiculo == null) {
+				throw new VehiculoBadRequestException();
+			}
+			
+			Vehiculo vehiculo;
+			vehiculo = obtenerVehiculoPorPlaca(placa);
+			if(vehiculo != null) {
+				LOGGER.error(new VehiculoYaExisteException().getMessage());
+				throw new VehiculoYaExisteException();
+			}
+			
+			vehiculo = factoryVehiculo.getVehiculo(vehiculoDto, tipoVehiculo);
+			vehiculo = guardarVehiculo(vehiculo);
+			
+			return vehiculo;
+			
+		} catch (NullPointerException e) {
+			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
 			throw new VehiculoBadRequestException();
 		}
 		
-		Vehiculo vehiculo;
-		vehiculo = obtenerVehiculoPorPlaca(placa);
-		if(vehiculo != null) {
-			LOGGER.error(new VehiculoYaExisteException().getMessage());
-			throw new VehiculoYaExisteException();
-		}
 		
-		vehiculo = factoryVehiculo.getVehiculo(vehiculoDto, tipoVehiculo);
-		vehiculo = guardarVehiculo(vehiculo);
-		if(vehiculo == null) {
-			LOGGER.error(new VehiculoBadRequestException().getMessage());
-			throw new VehiculoBadRequestException();
-		}
-		
-		return vehiculo;
 	}
 
 	@Override

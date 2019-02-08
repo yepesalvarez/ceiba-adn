@@ -6,6 +6,7 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.TipoVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.TipoVehiculoRepositorio;
@@ -26,12 +27,22 @@ public class TipoVehiculoServicioImplementacion implements TipoVehiculoServicio 
 
 	@Override
 	public TipoVehiculo obtenerPorNombre(String nombreTipoVehiculo) {
-		return tipoVehiculoRepositorio.findByNombre(nombreTipoVehiculo.toLowerCase());
+		try {
+			return tipoVehiculoRepositorio.findByNombre(nombreTipoVehiculo.toLowerCase());
+		}catch (Exception e) {
+			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
+			throw new VehiculoBadRequestException();
+		}
 	}
 	
 	@Override
 	public TipoVehiculo obtenerPorId(Long idTipoVehiculo) {
-		return tipoVehiculoRepositorio.findById(idTipoVehiculo).orElse(null);
+		try {
+			return tipoVehiculoRepositorio.findById(idTipoVehiculo).orElse(null);
+		}catch (Exception e) {
+			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
+			throw new VehiculoBadRequestException();
+		}
 	}
 
 	@Override
