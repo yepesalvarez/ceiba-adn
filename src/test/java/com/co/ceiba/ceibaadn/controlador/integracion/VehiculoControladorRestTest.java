@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +22,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
-import com.co.ceiba.ceibaadn.dominio.TipoVehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
-import com.co.ceiba.ceibaadn.repositorio.TipoVehiculoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 public class VehiculoControladorRestTest {
-	
-	@Autowired
-	private TipoVehiculoRepositorio tipoVehiculoRepositorio;
 	
 	@Autowired
 	private VehiculoServicio vehiculoServicio;
@@ -44,31 +39,44 @@ public class VehiculoControladorRestTest {
 	@Autowired
 	Environment env;
 	
-	private TipoVehiculo tipoVehiculo;
 	private VehiculoDto vehiculoDto;
 	
 	private static final String PLACA_VALIDA = "ABC123";
+	private static final String PLACA_VALIDA_DOS = "qwe456";
+	private static final String PLACA_VALIDA_TRES = "ASD777";
 	private static final String PLACA_NO_VALIDA = "ABC1234";
-	private static final String TIPO_VEHICULO_OK = "carro";
-	private static final String URL_GUARDAR_VEHICULO = "http://localhost:8080/api/vehiculo";
+	private static final String TIPO_VEHICULO_OK_CARRO = "carro";
+	private static final String TIPO_VEHICULO_OK_MOTO = "moto";
+	private static final String TIPO_VEHICULO_NO_VALIDO = "tren";
+	private static final int CILINDRAJE = 200; 
+	private static final String URL_GUARDAR_OBTENER_VEHICULO = "http://localhost:8080/api/vehiculo";
+	private static final String BAD_REQUEST = JSONObject.quote(new VehiculoBadRequestException().getMessage());
+	private static final String YA_EXISTE_VEHICULO = JSONObject.quote(new VehiculoYaExisteException().getMessage());
+	
+	
+	
+	@Test
+    public void guardarVehiculoTestE2EokCarro() throws Exception {
 		
-	@Before
-	public void setUp() {
-		 tipoVehiculo = new TipoVehiculo();
-		 tipoVehiculo.setId(1L);
-	     tipoVehiculo.setNombre(TIPO_VEHICULO_OK);
-	     tipoVehiculoRepositorio.save(tipoVehiculo);		
+		vehiculoDto = new VehiculoDto(2L, PLACA_VALIDA, TIPO_VEHICULO_OK_CARRO);
+		MvcResult result = crearVehiculo(vehiculoDto);
+		
+		assertEquals(200, result.getResponse().getStatus());
+		assertEquals(result.getResponse().getContentAsString(), 
+				JSONObject.quote(env.getProperty("controller.status.ok")));
+		assertNotNull(vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca()));
+     		
 	}
 	
 	@Test
-    public void guardarVehiculoTestE2Eok() throws Exception {
+    public void guardarVehiculoTestE2EokMoto() throws Exception {
 		
-		vehiculoDto = new VehiculoDto(2L, PLACA_VALIDA, TIPO_VEHICULO_OK);
+		vehiculoDto = new VehiculoDto(9L, PLACA_VALIDA_TRES, TIPO_VEHICULO_OK_MOTO, CILINDRAJE);
 		MvcResult result = crearVehiculo(vehiculoDto);
 		
-		assertEquals(result.getResponse().getContentAsString(), 
-				env.getProperty("controller.status.ok"));
 		assertEquals(200, result.getResponse().getStatus());
+		assertEquals(result.getResponse().getContentAsString(), 
+				JSONObject.quote(env.getProperty("controller.status.ok")));
 		assertNotNull(vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca()));
      		
 	}
@@ -76,25 +84,25 @@ public class VehiculoControladorRestTest {
 	@Test
     public void guardarVehiculoTestE2EplacaRepetida() throws Exception {
 		
-		vehiculoDto = new VehiculoDto(3L, PLACA_VALIDA, TIPO_VEHICULO_OK);
+		vehiculoDto = new VehiculoDto(3L, PLACA_VALIDA, TIPO_VEHICULO_OK_CARRO);
 		crearVehiculo(vehiculoDto);
 		MvcResult result = crearVehiculo(vehiculoDto);
 		
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoYaExisteException.class);
-		assertEquals(result.getResponse().getContentAsString(), new VehiculoYaExisteException().getMessage());
+		assertEquals(result.getResponse().getContentAsString(), YA_EXISTE_VEHICULO);
      		
 	}
 	
 	@Test
     public void guardarVehiculoTestE2EplacaInvalida() throws Exception {
 		
-		vehiculoDto = new VehiculoDto(4L, PLACA_NO_VALIDA, TIPO_VEHICULO_OK);
+		vehiculoDto = new VehiculoDto(4L, PLACA_NO_VALIDA, TIPO_VEHICULO_OK_CARRO);
 		MvcResult result = crearVehiculo(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);
-		assertEquals(result.getResponse().getContentAsString(), new VehiculoBadRequestException().getMessage());
+		assertEquals(result.getResponse().getContentAsString(), BAD_REQUEST);
 		assertNull(vehiculoServicio.obtenerVehiculoPorId(vehiculoDto.getId()));
      		
 	}
@@ -102,12 +110,12 @@ public class VehiculoControladorRestTest {
 	@Test
     public void guardarVehiculoTestE2ETipoNoValido() throws Exception {
 		
-		vehiculoDto = new VehiculoDto(5L, PLACA_VALIDA, "tren");
+		vehiculoDto = new VehiculoDto(5L, PLACA_VALIDA, TIPO_VEHICULO_NO_VALIDO);
 		MvcResult result = crearVehiculo(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);
-		assertEquals(result.getResponse().getContentAsString(), new VehiculoBadRequestException().getMessage());
+		assertEquals(result.getResponse().getContentAsString(), BAD_REQUEST);
 		assertNull(vehiculoServicio.obtenerVehiculoPorId(vehiculoDto.getId()));
      		
 	}
@@ -120,7 +128,7 @@ public class VehiculoControladorRestTest {
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);
-		assertEquals(result.getResponse().getContentAsString(), new VehiculoBadRequestException().getMessage());
+		assertEquals(result.getResponse().getContentAsString(), BAD_REQUEST);
      		
 	}
 	
@@ -132,27 +140,41 @@ public class VehiculoControladorRestTest {
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);
-		assertEquals(result.getResponse().getContentAsString(), new VehiculoBadRequestException().getMessage());
+		assertEquals(result.getResponse().getContentAsString(), BAD_REQUEST);
      		
 	}
 	
 	@Test
     public void guardarVehiculoTestCampoBlancoPlaca() throws Exception {
 		
-		vehiculoDto = new VehiculoDto("", TIPO_VEHICULO_OK);
+		vehiculoDto = new VehiculoDto("", TIPO_VEHICULO_OK_CARRO);
 		MvcResult result = crearVehiculo(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);
-		assertEquals(result.getResponse().getContentAsString(), new VehiculoBadRequestException().getMessage());
+		assertEquals(result.getResponse().getContentAsString(), BAD_REQUEST);
      		
 	}
 	
+	@Test
+	public void obtenerTodosVehiculoTestOk() throws Exception {
+		vehiculoDto = new VehiculoDto(6L, PLACA_VALIDA, TIPO_VEHICULO_OK_CARRO);
+		crearVehiculo(vehiculoDto);
+		vehiculoDto = new VehiculoDto(7L, PLACA_VALIDA_DOS, TIPO_VEHICULO_OK_MOTO, CILINDRAJE);
+		crearVehiculo(vehiculoDto);
+		
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(URL_GUARDAR_OBTENER_VEHICULO);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		assertEquals(200, result.getResponse().getStatus());
+		//Deben de existir mínimo dos placas
+		assertTrue(result.getResponse().getContentAsString().split("placa").length - 1 >= 2);
+				
+	}
+	
 	public MvcResult crearVehiculo(VehiculoDto vehiculo) throws Exception{
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_GUARDAR_VEHICULO)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_GUARDAR_OBTENER_VEHICULO)
 		.contentType(MediaType.APPLICATION_JSON_UTF8).content(new JSONObject(vehiculo).toString());
 		return mockMvc.perform(requestBuilder).andReturn();
 	}
-
 
 }

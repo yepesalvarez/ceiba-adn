@@ -74,7 +74,7 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 			
 			return vehiculo;
 			
-		} catch (NullPointerException e) {
+		} catch (VehiculoBadRequestException e) {
 			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
 			throw new VehiculoBadRequestException();
 		}

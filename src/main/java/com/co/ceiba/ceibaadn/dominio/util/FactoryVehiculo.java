@@ -9,7 +9,7 @@ import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 
 @Component
 public class FactoryVehiculo {
-		
+	
 	private FactoryVehiculo() {}
 	
 	public static final String CARRO = "carro";
@@ -25,5 +25,5 @@ public class FactoryVehiculo {
 		}
 		return null;
 	}
-
+	
 }
