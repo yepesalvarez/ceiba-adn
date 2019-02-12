@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="col-md-12">
+    <div class="col-md-2">
+      <a class="navbar-brand">{{title}}</a>
+      <a class="navbar-brand">
+          <img src="../assets/imgs/logoCeibaSoftware-horizontal.png" width="200" height="100" alt="">
+      </a>
+    </div>
+    <div class="col-md-10">
+        <h6>
+          <p class="lead">
+            Luis Fernando Yepes
+          </p>
+        </h6>
+    </div>
+  </div>
+  <!--
+  <div class="col-md-4">
+    <form #uploadForm="ngForm" (ngSubmit)="onSubmit()" id='uploadForm'>
+      <div class="form-group row">
+        <label for="nuevaCedula" class="col-sm-2 col-form-label">Cedula</label>
+        <div class="col-sm-10">
+          <input type="number"  id="nuevaCedula" name="nuevaCedula" [(ngModel)]="nuevaCedula" class="form-control mr-sm-2"  placeholder="Cedula" aria-label="Cedula" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="nuevoInput" class="col-sm-2 col-form-label">Cargue</label>
+        <div class="col-sm-10">
+          <input type="file" name="nuevoInput" (change)="onFileChange($event)" id="nuevoInput" placeholder="Seleccionar archivo" accept=".txt" required>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Cargar!</button>
+        </div>
+      </div>
+    </form>
+  </div>
+  -->
+</nav>
+<div *ngIf="mensajeError" class="alert alert-danger col-md-12" role="alert">
+    <strong>Error: </strong>{{mensajeError}}
+</div>
+<div class="col-md-12" *ngIf="vehiculos">
+  <table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">Placa</th>
+				<th scope="col">Tipo Vehiculo</th>
+				<th scope="col">Fecha Ingreso</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let vehiculo of vehiculos">
+				<td>{{vehiculo.placa}}</td>
+        <td>{{vehiculo.tipoVehiculo}}</td>
+        <td>{{vehiculo.fechaIngreso}}</td>
+        <!--
+				<td><button type="button" class="btn btn-primary" (click)="descargar($event)" name="{{ejecucion.linkInput}}">Descargar input</button></td>
+				-->
+			</tr>
+		</tbody>
+  </table>
+</div>

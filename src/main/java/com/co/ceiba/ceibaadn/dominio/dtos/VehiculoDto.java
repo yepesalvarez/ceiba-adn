@@ -1,11 +1,15 @@
 package com.co.ceiba.ceibaadn.dominio.dtos;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class VehiculoDto {
 	
 	Long id;
 	String placa;
 	String tipoVehiculo;
 	int cilindraje;
+	String fechaIngreso;
 	
 	public VehiculoDto () {}
 	
@@ -57,6 +61,15 @@ public class VehiculoDto {
 		this.tipoVehiculo = tipoVehiculo;
 	}
 	
+	public String getFechaIngreso() {
+		return fechaIngreso;
+	}
+
+	public void setFechaIngreso(LocalDateTime fechaIngreso) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		this.fechaIngreso = fechaIngreso.format(formatter);
+	}
+
 	public int getCilindraje() {
 		return cilindraje;
 	}

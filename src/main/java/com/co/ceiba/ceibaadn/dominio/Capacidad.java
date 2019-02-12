@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -22,7 +21,7 @@ public class Capacidad extends Entidad{
 	private Parqueadero parqueadero;
 		
 	@OneToOne(fetch = FetchType.LAZY)
-    @MapsId
+	@JoinColumn(name = "tipo_vehiculo_fk", referencedColumnName = "id")
 	private TipoVehiculo tipoVehiculo;
 	
 	@Column(name = "limite")

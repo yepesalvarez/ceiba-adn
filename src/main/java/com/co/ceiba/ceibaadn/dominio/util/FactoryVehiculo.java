@@ -36,8 +36,6 @@ public class FactoryVehiculo {
 	public static final String CARRO = "carro";
 	public static final String MOTO = "moto";
 	
-	private Capacidad capacidadTipoVehiculo;
-	
 	public Vehiculo getVehiculo(VehiculoDto vehiculo, TipoVehiculo tipoVehiculo) {
 		
 		if (vehiculo.getTipoVehiculo().equalsIgnoreCase(CARRO)) {
@@ -50,6 +48,8 @@ public class FactoryVehiculo {
 	}
 	
 	public Set<Capacidad> getCapacidadesParqueadero() {
+		
+		Capacidad capacidadTipoVehiculo;
 		
 		Set<Capacidad> capacidadesParqueadero = new HashSet<>();
 		
