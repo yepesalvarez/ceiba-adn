@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "parqueadero")
 public class Parqueadero extends Entidad {
 
-	@OneToMany(cascade = CascadeType.DETACH)
+	@OneToMany(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "parqueadero_fk")
 	private Set<Vehiculo> vehiculos;
 	

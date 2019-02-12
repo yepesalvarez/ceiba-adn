@@ -51,35 +51,27 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 	}
 	
 	@Override
-	public Vehiculo guardarVehiculo(VehiculoDto vehiculoDto) {
-		
-		try {
-			
+	public Vehiculo guardarVehiculo(VehiculoDto vehiculoDto) {	
+		try {		
 			String placa = vehiculoDto.getPlaca();
 			String tipoVehiculoString = vehiculoDto.getTipoVehiculo();
 			TipoVehiculo tipoVehiculo = tipoVehiculoServicio.obtenerPorNombre(tipoVehiculoString);
 			if ((placa.equals("") || placa.length() > 6) || (tipoVehiculoString.equals("")) || tipoVehiculo == null) {
 				throw new VehiculoBadRequestException();
-			}
-			
+			}		
 			Vehiculo vehiculo;
 			vehiculo = obtenerVehiculoPorPlaca(placa);
 			if(vehiculo != null) {
 				LOGGER.error(new VehiculoYaExisteException().getMessage());
 				throw new VehiculoYaExisteException();
-			}
-			
+			}			
 			vehiculo = factoryVehiculo.getVehiculo(vehiculoDto, tipoVehiculo);
-			vehiculo = guardarVehiculo(vehiculo);
-			
-			return vehiculo;
-			
+			vehiculo = guardarVehiculo(vehiculo);		
+			return vehiculo;		
 		} catch (VehiculoBadRequestException e) {
 			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
 			throw new VehiculoBadRequestException();
-		}
-		
-		
+		}	
 	}
 
 	@Override
@@ -89,8 +81,6 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 
 	@Override
 	public void eliminarVehiculo(Long idVehiculo) {
-		vehiculoRepositorio.deleteById(idVehiculo);
-		
+		vehiculoRepositorio.deleteById(idVehiculo);	
 	}
-
 }
