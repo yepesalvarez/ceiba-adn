@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
+import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoInternalServerErrorException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
@@ -120,6 +121,19 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	@Override
 	public Set<Vehiculo> obtenerVehiculosParqueados() {
 		return Parqueadero.getInstance().getVehiculos();
+	}
+
+	@Override
+	public void pagarParqueadero(Long idVehiculo) {
+		try {
+			Cobro cobro = cobroServicio.obtenerCobroPorVehiculo(vehiculoServicio.obtenerVehiculoPorId(idVehiculo));
+			cobro.setEstado(EstadoCobro.PAGADO.toString());
+			cobroServicio.guardarCobro(cobro);
+			Parqueadero.getInstance().getCobros().add(cobro);
+			guardarCambios(Parqueadero.getInstance());
+		} catch(CobroNoPosibleException e) {
+			throw new CobroNoPosibleException();
+		}
 	}
 
 	@Override

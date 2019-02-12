@@ -7,6 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
+
+import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
@@ -14,12 +17,16 @@ import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.CobroRepositorio;
 import com.co.ceiba.ceibaadn.servicio.CobroServicio;
+import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
 @Service
 public class CobroServicioImplementacion implements CobroServicio {
 
 	@Autowired
 	CobroRepositorio cobroRepositorio;
+	
+	@Autowired
+	VehiculoServicio vehiculoServicio;
 	
 	@Autowired
 	FactoryVehiculo factoryVehiculo;
@@ -29,9 +36,6 @@ public class CobroServicioImplementacion implements CobroServicio {
 	
 	@Override
 	public Cobro guardarCobro(Cobro cobro) {
-		if(cobro.getFinParqueo() != null) {
-			cobro.setValorPagar(calcularCobro(cobro));
-		}
 		return cobroRepositorio.save(cobro);
 	}
 
@@ -55,22 +59,28 @@ public class CobroServicioImplementacion implements CobroServicio {
 		return (List<Cobro>) cobroRepositorio.findAll();
 	}
 	
-	public double calcularCobro(Cobro cobro) {
-		
-		LocalDateTime tempDateTime = LocalDateTime.from(cobro.getInicioParqueo());
-		int horasParqueo = (int) tempDateTime.until(cobro.getFinParqueo(), ChronoUnit.HOURS);
-		calcularTiempo(horasParqueo);
-		double netoPagar = 0;
-		for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
-			if (cobro.getVehiculo().getTipoVehiculo().equals(capacidad.getTipoVehiculo())) {
-				netoPagar += capacidad.getValorDia() * diasCobrar;
-				netoPagar += capacidad.getValorHora() * horasCobrar;
-				netoPagar += factoryVehiculo.getRecargoVehiculo(cobro.getVehiculo());
+	@Override
+	public double calcularCobro(Long idVehiculo, String fechaFinParqueoString) {
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			LocalDateTime fechaFinParqueo = LocalDateTime.parse(fechaFinParqueoString, formatter);
+			
+			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
+			LocalDateTime tempDateTime = LocalDateTime.from(obtenerCobroPorVehiculo(vehiculo).getInicioParqueo());
+			int horasParqueo = (int) tempDateTime.until(fechaFinParqueo, ChronoUnit.HOURS);
+			calcularTiempo(horasParqueo);
+			double netoPagar = 0;
+			for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
+				if (vehiculo.getTipoVehiculo().equals(capacidad.getTipoVehiculo())) {
+					netoPagar += capacidad.getValorDia() * diasCobrar;
+					netoPagar += capacidad.getValorHora() * horasCobrar;
+					netoPagar += factoryVehiculo.getRecargoVehiculo(vehiculo);
+				}
 			}
+			return netoPagar;		
+		} catch(CobroNoPosibleException e) {
+			throw new CobroNoPosibleException();
 		}
-		
-		return netoPagar;		
-		
 	}
 	
 	public void calcularTiempo(int horasBase) {

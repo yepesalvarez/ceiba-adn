@@ -11,6 +11,7 @@ public interface ParqueaderoServicio {
 	Set<Vehiculo> actualizarRangos();
 	Set<Vehiculo> obtenerVehiculosParqueados();
 	Set<Vehiculo> agregarVehiculo(Vehiculo vehiculo);
+	void pagarParqueadero(Long idVehiculo);
 	Set<Vehiculo> retirarVehiculo(Vehiculo vehiculo);
 
 }

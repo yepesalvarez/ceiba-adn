@@ -51,6 +51,26 @@ public class Parqueadero extends Entidad {
 		capacidad.setParqueadero(null);
 	}
 	
+	public void addCobro(Cobro cobro) {
+		this.cobros.add(cobro);
+		cobro.setParqueadero(this);
+	}
+	
+	public void removeCobro(Cobro cobro) {
+		this.cobros.remove(cobro);
+		cobro.setParqueadero(null);
+	}
+	
+	public void addVehiculo(Vehiculo vehiculo) {
+		this.vehiculos.add(vehiculo);
+		vehiculo.setParqueadero(this);
+	}
+	
+	public void removeVehiculo(Vehiculo vehiculo) {
+		this.vehiculos.remove(vehiculo);
+		vehiculo.setParqueadero(null);
+	}
+	
 	public Set<Vehiculo> getVehiculos() {
 		return vehiculos;
 	}

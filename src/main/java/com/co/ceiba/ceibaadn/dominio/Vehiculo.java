@@ -27,6 +27,10 @@ public abstract class Vehiculo extends Entidad {
 	@JoinColumn(name = "tipoVehiculo_fk", referencedColumnName = "id")
 	private TipoVehiculo tipoVehiculo;
 	
+	@ManyToOne
+	@JoinColumn(name = "parqueadero_fk", referencedColumnName = "id")
+	Parqueadero parqueadero;
+	
 	public Vehiculo(String placa, TipoVehiculo tipoVehiculo) {
 		this.placa = placa;
 		this.tipoVehiculo = tipoVehiculo;
@@ -50,6 +54,14 @@ public abstract class Vehiculo extends Entidad {
 		this.tipoVehiculo = tipoVehiculo;
 	}
 	
+	public Parqueadero getParqueadero() {
+		return parqueadero;
+	}
+
+	public void setParqueadero(Parqueadero parqueadero) {
+		this.parqueadero = parqueadero;
+	}
+
 	@Override
 	   public boolean equals(Object obj)
 	   {
