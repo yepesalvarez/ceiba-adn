@@ -2,7 +2,6 @@ package com.co.ceiba.ceibaadn.dominio;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +22,6 @@ public class TipoVehiculo extends Entidad{
 	private String nombre;
 	
 	@OneToMany(mappedBy = "tipoVehiculo",
-			cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY)
 	private Set<Vehiculo> vehiculos; 
 	

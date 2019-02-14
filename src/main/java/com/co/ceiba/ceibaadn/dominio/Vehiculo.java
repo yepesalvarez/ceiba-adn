@@ -37,7 +37,7 @@ public abstract class Vehiculo extends Entidad {
 	}
 	
 	public Vehiculo() {}
-	
+		
 	public String getPlaca() {
 		return placa;
 	}

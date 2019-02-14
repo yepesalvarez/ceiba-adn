@@ -1,7 +1,5 @@
 package com.co.ceiba.ceibaadn.servicio.impl;
 
-import java.util.List;
-
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +27,6 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 	private FactoryVehiculo factoryVehiculo;
 	
 	public static final Logger LOGGER = Logger.getLogger(VehiculoServicioImplementacion.class);
-
-	@Override
-	public List<Vehiculo> obtenerTodosVehiculos() {
-		return (List<Vehiculo>) vehiculoRepositorio.findAll();
-	}
 
 	@Override
 	public Vehiculo obtenerVehiculoPorPlaca(String placa) {
@@ -73,14 +66,5 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 			throw new VehiculoBadRequestException();
 		}	
 	}
-
-	@Override
-	public void eliminarVehiculo(Vehiculo vehiculo) {
-		vehiculoRepositorio.delete(vehiculo);
-	}
-
-	@Override
-	public void eliminarVehiculo(Long idVehiculo) {
-		vehiculoRepositorio.deleteById(idVehiculo);	
-	}
+	
 }

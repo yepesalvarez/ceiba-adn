@@ -3,7 +3,7 @@ package com.co.ceiba.ceibaadn.controlador;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +20,7 @@ public class CobroControladorRest {
 	@Autowired
 	VehiculoServicio vehiculoServicio;
 	
-	@GetMapping(value = "/api/cobro")
+	@PostMapping(value = "/api/cobro")
 	public ResponseEntity<Double> generarCobro(@RequestParam("idVehiculo") Long idVehiculo, @RequestParam("finParqueo") String finParqueo){
 		try {
 			return new ResponseEntity<>(cobroServicio.calcularCobro(idVehiculo, finParqueo), HttpStatus.OK);

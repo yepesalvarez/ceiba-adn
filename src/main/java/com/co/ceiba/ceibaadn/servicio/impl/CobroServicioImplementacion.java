@@ -2,7 +2,6 @@ package com.co.ceiba.ceibaadn.servicio.impl;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,29 +44,20 @@ public class CobroServicioImplementacion implements CobroServicio {
 	}
 
 	@Override
-	public Cobro obtenerCobroPorId(Long idCobro) {
-		return cobroRepositorio.findById(idCobro).orElse(null);
-	}
-
-	@Override
-	public List<Cobro> obtenerCobroPorEstado(String estadoCobro) {
-		return (List<Cobro>) cobroRepositorio.findByEstado(estadoCobro);
-	}
-
-	@Override
-	public List<Cobro> obtenerTodosCobro() {
-		return (List<Cobro>) cobroRepositorio.findAll();
-	}
-	
-	@Override
 	public double calcularCobro(Long idVehiculo, String fechaFinParqueoString) {
 		try {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 			LocalDateTime fechaFinParqueo = LocalDateTime.parse(fechaFinParqueoString, formatter);
 			
 			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
-			LocalDateTime tempDateTime = LocalDateTime.from(obtenerCobroPorVehiculo(vehiculo).getInicioParqueo());
-			int horasParqueo = (int) tempDateTime.until(fechaFinParqueo, ChronoUnit.HOURS);
+			Cobro cobro = obtenerCobroPorVehiculo(vehiculo);
+			cobro.setFinParqueo(fechaFinParqueo);
+			LocalDateTime tempDateTime = LocalDateTime.from(cobro.getInicioParqueo());
+			long segundosParqueo = tempDateTime.until(fechaFinParqueo, ChronoUnit.SECONDS);
+			int horasParqueo = (int) segundosParqueo / 3600;
+			if (segundosParqueo % 3600 != 0) {
+				horasParqueo+=1;
+			}
 			calcularTiempo(horasParqueo);
 			double netoPagar = 0;
 			for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
@@ -77,6 +67,8 @@ public class CobroServicioImplementacion implements CobroServicio {
 					netoPagar += factoryVehiculo.getRecargoVehiculo(vehiculo);
 				}
 			}
+			cobro.setValorPagar(netoPagar);
+			guardarCobro(cobro);
 			return netoPagar;		
 		} catch(CobroNoPosibleException e) {
 			throw new CobroNoPosibleException();

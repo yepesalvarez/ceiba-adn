@@ -10,6 +10,5 @@ import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 public interface CobroRepositorio extends CrudRepository<Cobro, Long> {
 	
 	Cobro findByVehiculo(Vehiculo vehiculo);
-	Iterable<Cobro> findByEstado(String estado);
 
 }

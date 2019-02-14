@@ -2,7 +2,6 @@ package com.co.ceiba.ceibaadn.dominio;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,17 +13,15 @@ import javax.persistence.Table;
 @Table(name = "parqueadero")
 public class Parqueadero extends Entidad {
 
-	@OneToMany(cascade = CascadeType.REFRESH)
+	@OneToMany
 	@JoinColumn(name = "parqueadero_fk")
 	private Set<Vehiculo> vehiculos;
 	
 	@OneToMany(mappedBy = "parqueadero",
-			cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY)
 	private Set<Capacidad> capacidades;
 	
 	@OneToMany(mappedBy = "parqueadero",
-			cascade = CascadeType.ALL, 
 			fetch = FetchType.LAZY)
 	private Set<Cobro> cobros;
 	

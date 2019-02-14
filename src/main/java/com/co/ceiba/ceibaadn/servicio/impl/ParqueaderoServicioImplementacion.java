@@ -18,9 +18,11 @@ import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
+import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.enums.DiasHabilitadosPlacaA;
 import com.co.ceiba.ceibaadn.dominio.enums.EstadoCobro;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
+import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
 import com.co.ceiba.ceibaadn.repositorio.ParqueaderoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.CapacidadServicio;
 import com.co.ceiba.ceibaadn.servicio.CobroServicio;
@@ -43,17 +45,20 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	CobroServicio cobroServicio;
 	
 	@Autowired
-	FactoryVehiculo factoryVehuculo;
+	FactoryVehiculo factoryVehiculo;
 		
 	@Autowired
 	CapacidadServicio capacidadServicio;
+	
+	@Autowired
+	ModelToDto modelToDto;
 	
 	public static final String ERROR_ARCHIVO_PROPIEDADES = "Fallo al intentar cargar valores desde archivo de propiedades";
 	
 	public static final Logger LOGGER = Logger.getLogger(ParqueaderoServicioImplementacion.class);
 	
 	@Override
-	public Set<Vehiculo> actualizarRangos() {
+	public Set<VehiculoDto> actualizarRangos() {
 		
 		try {
 			if (Parqueadero.getInstance().getVehiculos() == null || 
@@ -64,7 +69,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 				Parqueadero.getInstance().setMaximoHorasDia(Integer.parseInt(env.getProperty("horas.maximo.dia")));
 				guardarCambios(Parqueadero.getInstance());
 				
-				Set<Capacidad> capacidadesParqueadero = factoryVehuculo.getCapacidadesParqueadero();
+				Set<Capacidad> capacidadesParqueadero = factoryVehiculo.getCapacidadesParqueadero();
 				for (Capacidad capacidad : capacidadesParqueadero) {
 					capacidad.setParqueadero(Parqueadero.getInstance());
 					capacidadServicio.guardarCapacidad(capacidad);
@@ -80,13 +85,17 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 			LOGGER.error(ERROR_ARCHIVO_PROPIEDADES);
 			throw new ParqueaderoInternalServerErrorException();
 		}
-		return Parqueadero.getInstance().getVehiculos();
+		return modelToDto.vehiculosToVehiculosDto(Parqueadero.getInstance().getVehiculos());
 	}
 
 	@Override
-	public Set<Vehiculo> agregarVehiculo(Vehiculo vehiculo) {
+	public Set<VehiculoDto> agregarVehiculo(VehiculoDto vehiculoDto) {
 		try {
-			verificarVehiculoEnDiaNoHabilitado(vehiculo.getPlaca());
+			verificarVehiculoEnDiaNoHabilitado(vehiculoDto.getPlaca());
+			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca());
+			if( vehiculo == null) {
+				vehiculo = vehiculoServicio.guardarVehiculo(modelToDto.vehiculoDtoToVehiculo(vehiculoDto));
+			}
 			for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
 				if (capacidad.getTipoVehiculo().equals(vehiculo.getTipoVehiculo())) {
 					int contadorVehiculosTipo = 
@@ -94,7 +103,6 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 							.filter(vehiculoEnParqueadero -> vehiculoEnParqueadero.getTipoVehiculo().equals(capacidad.getTipoVehiculo())).count();
 					if (capacidad.getLimite() > contadorVehiculosTipo && !Parqueadero.getInstance().getVehiculos().contains(vehiculo)) {
 						Parqueadero.getInstance().getVehiculos().add(vehiculo);
-						
 						Cobro cobro = new Cobro();
 						cobro.setEstado(EstadoCobro.PENDIENTE.toString());
 						cobro.setVehiculo(vehiculo);
@@ -110,22 +118,27 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 		}catch(ParqueaderoIngresoNoPosibleException e) {
 			throw new ParqueaderoIngresoNoPosibleException();
 		}
-		return Parqueadero.getInstance().getVehiculos();
+		return modelToDto.vehiculosToVehiculosDto(Parqueadero.getInstance().getVehiculos());
 	}
 
 	@Override
-	public Set<Vehiculo> retirarVehiculo(Vehiculo vehiculo) {
-		if (cobroServicio.obtenerCobroPorVehiculo(vehiculo).getEstado().equals(EstadoCobro.PENDIENTE.toString())
+	public Set<VehiculoDto> retirarVehiculo(Long idVehiculo) {
+		Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
+		if (vehiculo == null 
+				|| cobroServicio.obtenerCobroPorVehiculo(vehiculo).getEstado()
+					.equals(EstadoCobro.PENDIENTE.toString())
 				|| !Parqueadero.getInstance().getVehiculos().contains(vehiculo)) {
 			throw new ParqueaderoRetiroVehiculoNoPosibleException();
 		}
 		Parqueadero.getInstance().getVehiculos().remove(vehiculo);
-		return Parqueadero.getInstance().getVehiculos();
+		vehiculoServicio.guardarVehiculo(vehiculo);
+		guardarCambios(Parqueadero.getInstance());
+		return modelToDto.vehiculosToVehiculosDto(Parqueadero.getInstance().getVehiculos());
 	}
 	
 	@Override
-	public Set<Vehiculo> obtenerVehiculosParqueados() {
-		return Parqueadero.getInstance().getVehiculos();
+	public Set<VehiculoDto> obtenerVehiculosParqueados() {
+		return modelToDto.vehiculosToVehiculosDto(Parqueadero.getInstance().getVehiculos());
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { GLOBAL } from './global';
 import { Vehiculo } from '../models/vehiculo';
@@ -24,7 +24,9 @@ export class ParqueaderoService {
     }
 
     pagarParqueadero(idVehiculo: number) {
-        return this._http.patch(this.url, idVehiculo).map(response => response.json());
+        const params = new URLSearchParams();
+        params.append('idVehiculo', idVehiculo.toString());
+        return this._http.patch(this.url, params).map(response => response.json());
     }
 
 }

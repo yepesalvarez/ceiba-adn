@@ -1,7 +1,5 @@
 package com.co.ceiba.ceibaadn.servicio.impl;
 
-import java.util.List;
-
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +19,6 @@ public class TipoVehiculoServicioImplementacion implements TipoVehiculoServicio 
 	TipoVehiculoRepositorio tipoVehiculoRepositorio;
 	
 	@Override
-	public List<TipoVehiculo> obtenerTodosTipoVehiculo() {
-		return (List<TipoVehiculo>) tipoVehiculoRepositorio.findAll();
-	}
-
-	@Override
 	public TipoVehiculo obtenerPorNombre(String nombreTipoVehiculo) {
 		try {
 			return tipoVehiculoRepositorio.findByNombre(nombreTipoVehiculo.toLowerCase());
@@ -36,32 +29,12 @@ public class TipoVehiculoServicioImplementacion implements TipoVehiculoServicio 
 	}
 	
 	@Override
-	public TipoVehiculo obtenerPorId(Long idTipoVehiculo) {
-		try {
-			return tipoVehiculoRepositorio.findById(idTipoVehiculo).orElse(null);
-		}catch (Exception e) {
-			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
-			throw new VehiculoBadRequestException();
-		}
-	}
-
-	@Override
 	public TipoVehiculo guardarTipoVehiculo(TipoVehiculo tipoVehiculo) {
 		if(obtenerPorNombre(tipoVehiculo.getNombre())!=null) {
 			LOGGER.error(new VehiculoYaExisteException());
 			return null;
 		}
 		return tipoVehiculoRepositorio.save(tipoVehiculo);
-	}
-
-	@Override
-	public void eliminarTipoVehiculo(TipoVehiculo tipoVehiculo) {
-		tipoVehiculoRepositorio.delete(tipoVehiculo);
-	}
-
-	@Override
-	public void eliminarTipoVehiculo(Long idTipoVehiculo) {
-		tipoVehiculoRepositorio.deleteById(idTipoVehiculo);
 	}
 
 }

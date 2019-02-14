@@ -70,6 +70,10 @@ public class VehiculoDto {
 		this.fechaIngreso = fechaIngreso.format(formatter);
 	}
 
+	public void setFechaIngreso(String fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
 	public int getCilindraje() {
 		return cilindraje;
 	}

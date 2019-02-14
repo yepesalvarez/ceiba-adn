@@ -1,7 +1,6 @@
 package com.co.ceiba.ceibaadn.controlador;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,7 @@ import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoInternalServerEr
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
-import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
-import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
 import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
@@ -40,12 +37,9 @@ public class ParqueaderoControladorRest {
 	
 	@Autowired
 	VehiculoServicio vehiculoServicio;
-	
-	@Autowired
-	ModelToDto modelToDto;
 
 	@GetMapping(value = "/", produces = "application/json")
-	public ResponseEntity<Set<Vehiculo>> obtenerParqueadero() {
+	public ResponseEntity<Set<VehiculoDto>> obtenerParqueadero() {
 		try {
 			return new ResponseEntity<>(parqueaderoServicio.actualizarRangos(), HttpStatus.OK);
 		}catch(ParqueaderoInternalServerErrorException e) {
@@ -57,10 +51,7 @@ public class ParqueaderoControladorRest {
 	public ResponseEntity<Set<VehiculoDto>> ingresarVehiculoParqueadero(@RequestBody VehiculoDto vehiculoDto) {
 		try {
 			parqueaderoServicio.actualizarRangos();
-			return new ResponseEntity<>(parqueaderoServicio.agregarVehiculo(
-					vehiculoServicio.guardarVehiculo(vehiculoDto))
-					.stream().map(vehiculo -> modelToDto.vehiculoToVehiculoDto(vehiculo))
-					.collect(Collectors.toSet())
+			return new ResponseEntity<>(parqueaderoServicio.agregarVehiculo(vehiculoDto)
 					, HttpStatus.OK);
 		} catch (VehiculoBadRequestException | VehiculoYaExisteException | ParqueaderoIngresoNoPosibleException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -70,10 +61,7 @@ public class ParqueaderoControladorRest {
 	@DeleteMapping(value = "/api/parqueadero/{idVehiculo}", produces = "application/json")
 	public ResponseEntity<Set<VehiculoDto>> retirarVehiculo(@PathVariable ("idVehiculo") Long idVehiculo){
 		try {
-			return new ResponseEntity<>(parqueaderoServicio.retirarVehiculo(
-					vehiculoServicio.obtenerVehiculoPorId(idVehiculo))
-					.stream().map(vehiculo -> modelToDto.vehiculoToVehiculoDto(vehiculo))
-					.collect(Collectors.toSet())
+			return new ResponseEntity<>(parqueaderoServicio.retirarVehiculo(idVehiculo)
 					, HttpStatus.OK);
 		}catch(ParqueaderoRetiroVehiculoNoPosibleException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -84,8 +72,6 @@ public class ParqueaderoControladorRest {
 	public ResponseEntity<Set<VehiculoDto>> obtenerVehiculosEnParqueadero(){
 		parqueaderoServicio.actualizarRangos();
 		return new ResponseEntity<>(parqueaderoServicio.obtenerVehiculosParqueados()
-				.stream().map(vehiculo -> modelToDto.vehiculoToVehiculoDto(vehiculo))
-				.collect(Collectors.toSet())
 				, HttpStatus.OK);
 	}
 	

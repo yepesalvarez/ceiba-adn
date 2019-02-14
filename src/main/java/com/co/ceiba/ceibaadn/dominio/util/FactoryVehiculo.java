@@ -73,14 +73,13 @@ public class FactoryVehiculo {
 	}
 	
 	public double getRecargoVehiculo(Vehiculo vehiculo) {
-	
-		//generar recargo moto
+		
 		if(modelMapper.map(vehiculo, VehiculoDto.class).getCilindraje() > Double.parseDouble(env.getProperty("vehiculos.moto.cilindraje,maximo"))) {
 				return Double.parseDouble(env.getProperty("vehiculos.moto.cilndraje.recargo"));
 		}
 		
 		return 0;
-			
+		
 	}
 	
 	

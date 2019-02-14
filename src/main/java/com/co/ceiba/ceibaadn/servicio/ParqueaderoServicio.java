@@ -3,15 +3,15 @@ package com.co.ceiba.ceibaadn.servicio;
 import java.util.Set;
 
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
-import com.co.ceiba.ceibaadn.dominio.Vehiculo;
+import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 
 public interface ParqueaderoServicio {
 	
 	void guardarCambios(Parqueadero parqueadero);
-	Set<Vehiculo> actualizarRangos();
-	Set<Vehiculo> obtenerVehiculosParqueados();
-	Set<Vehiculo> agregarVehiculo(Vehiculo vehiculo);
+	Set<VehiculoDto> actualizarRangos();
+	Set<VehiculoDto> obtenerVehiculosParqueados();
+	Set<VehiculoDto> agregarVehiculo(VehiculoDto vehiculoDto);
 	void pagarParqueadero(Long idVehiculo);
-	Set<Vehiculo> retirarVehiculo(Vehiculo vehiculo);
+	Set<VehiculoDto> retirarVehiculo(Long idVehiculo);
 
 }
