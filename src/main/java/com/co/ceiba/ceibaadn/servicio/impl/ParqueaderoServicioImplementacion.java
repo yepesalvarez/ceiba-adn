@@ -60,7 +60,6 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	
 	@Override
 	public Set<VehiculoDto> actualizarRangos() {
-		
 		try {
 			if (Parqueadero.getInstance().getVehiculos() == null || 
 					Parqueadero.getInstance().getVehiculos().isEmpty())
@@ -92,6 +91,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	@Override
 	public Set<VehiculoDto> ingresarVehiculo(VehiculoDto vehiculoDto) {
 		try {
+			actualizarRangos();
 			if(vehiculoDto.getPlaca() == null || vehiculoDto.getPlaca().equals("") 
 					|| vehiculoDto.getTipoVehiculo() == null 
 					|| vehiculoDto.getTipoVehiculo().equals("")) {
@@ -129,11 +129,11 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 
 	@Override
 	public Set<VehiculoDto> retirarVehiculo(Long idVehiculo) {
+		actualizarRangos();
 		Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
-		if (vehiculo == null 
+		if (vehiculo == null || vehiculo.getParqueadero() == null
 				|| cobroServicio.obtenerCobroPorVehiculo(vehiculo).getEstado()
-					.equals(EstadoCobro.PENDIENTE.toString())
-				|| !Parqueadero.getInstance().getVehiculos().contains(vehiculo)) {
+					.equals(EstadoCobro.PENDIENTE.toString())) {
 			throw new ParqueaderoRetiroVehiculoNoPosibleException();
 		}
 		Parqueadero.getInstance().getVehiculos().remove(vehiculo);
@@ -150,7 +150,12 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	@Override
 	public void pagarParqueadero(Long idVehiculo) {
 		try {
-			Cobro cobro = cobroServicio.obtenerCobroPorVehiculo(vehiculoServicio.obtenerVehiculoPorId(idVehiculo));
+			actualizarRangos();
+			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
+			if(vehiculo == null) {
+				throw new CobroNoPosibleException();
+			}
+			Cobro cobro = cobroServicio.obtenerCobroPorVehiculo(vehiculo);
 			cobro.setEstado(EstadoCobro.PAGADO.toString());
 			cobroServicio.guardarCobro(cobro);
 			Parqueadero.getInstance().getCobros().add(cobro);

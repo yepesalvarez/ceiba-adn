@@ -63,7 +63,6 @@ export class AppComponent implements OnInit {
       if (this.vehiculoDto.tipoVehiculo === 'moto' && this.vehiculoDto.cilindraje == null) {
         this.mensajeError = this.errorCilindraje;
       }else {
-        console.log(this.vehiculoDto);
         this._parqueaderoService.ingresarVehiculo(this.vehiculoDto).subscribe(
           response => {
           this.vehiculoDto.tipoVehiculo = null;

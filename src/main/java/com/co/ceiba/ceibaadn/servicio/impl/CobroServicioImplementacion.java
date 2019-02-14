@@ -46,10 +46,13 @@ public class CobroServicioImplementacion implements CobroServicio {
 	@Override
 	public double calcularCobro(Long idVehiculo, String fechaFinParqueoString) {
 		try {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-			LocalDateTime fechaFinParqueo = LocalDateTime.parse(fechaFinParqueoString, formatter);
 			
 			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
+			if (vehiculo == null) {
+				throw new CobroNoPosibleException();
+			}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+			LocalDateTime fechaFinParqueo = LocalDateTime.parse(fechaFinParqueoString, formatter);
 			Cobro cobro = obtenerCobroPorVehiculo(vehiculo);
 			cobro.setFinParqueo(fechaFinParqueo);
 			LocalDateTime tempDateTime = LocalDateTime.from(cobro.getInicioParqueo());
