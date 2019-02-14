@@ -10,7 +10,7 @@ public interface ParqueaderoServicio {
 	void guardarCambios(Parqueadero parqueadero);
 	Set<VehiculoDto> actualizarRangos();
 	Set<VehiculoDto> obtenerVehiculosParqueados();
-	Set<VehiculoDto> agregarVehiculo(VehiculoDto vehiculoDto);
+	Set<VehiculoDto> ingresarVehiculo(VehiculoDto vehiculoDto);
 	void pagarParqueadero(Long idVehiculo);
 	Set<VehiculoDto> retirarVehiculo(Long idVehiculo);
 

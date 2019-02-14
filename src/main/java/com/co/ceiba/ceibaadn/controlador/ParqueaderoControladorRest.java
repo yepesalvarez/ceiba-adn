@@ -51,9 +51,10 @@ public class ParqueaderoControladorRest {
 	public ResponseEntity<Set<VehiculoDto>> ingresarVehiculoParqueadero(@RequestBody VehiculoDto vehiculoDto) {
 		try {
 			parqueaderoServicio.actualizarRangos();
-			return new ResponseEntity<>(parqueaderoServicio.agregarVehiculo(vehiculoDto)
+			return new ResponseEntity<>(parqueaderoServicio.ingresarVehiculo(vehiculoDto)
 					, HttpStatus.OK);
-		} catch (VehiculoBadRequestException | VehiculoYaExisteException | ParqueaderoIngresoNoPosibleException e) {
+		} catch (VehiculoBadRequestException | VehiculoYaExisteException | 
+				ParqueaderoIngresoNoPosibleException | NullPointerException e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}

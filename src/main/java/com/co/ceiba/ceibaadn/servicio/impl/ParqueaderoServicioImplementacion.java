@@ -14,6 +14,7 @@ import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoInternalServerErrorException;
 import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
+import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
@@ -89,13 +90,18 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	}
 
 	@Override
-	public Set<VehiculoDto> agregarVehiculo(VehiculoDto vehiculoDto) {
+	public Set<VehiculoDto> ingresarVehiculo(VehiculoDto vehiculoDto) {
 		try {
+			if(vehiculoDto.getPlaca() == null || vehiculoDto.getPlaca().equals("") 
+					|| vehiculoDto.getTipoVehiculo() == null 
+					|| vehiculoDto.getTipoVehiculo().equals("")) {
+				throw new VehiculoBadRequestException();
+			}
 			verificarVehiculoEnDiaNoHabilitado(vehiculoDto.getPlaca());
 			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca());
 			if( vehiculo == null) {
 				vehiculo = vehiculoServicio.guardarVehiculo(modelToDto.vehiculoDtoToVehiculo(vehiculoDto));
-			}
+				}
 			for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
 				if (capacidad.getTipoVehiculo().equals(vehiculo.getTipoVehiculo())) {
 					int contadorVehiculosTipo = 
