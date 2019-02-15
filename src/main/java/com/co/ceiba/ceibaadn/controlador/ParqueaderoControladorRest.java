@@ -2,6 +2,7 @@ package com.co.ceiba.ceibaadn.controlador;
 
 import java.util.Set;
 
+import org.jboss.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -38,11 +39,14 @@ public class ParqueaderoControladorRest {
 	@Autowired
 	VehiculoServicio vehiculoServicio;
 
+	private static final Logger LOGGER = Logger.getLogger(ParqueaderoControladorRest.class);
+	
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Set<VehiculoDto>> obtenerParqueadero() {
 		try {
 			return new ResponseEntity<>(parqueaderoServicio.actualizarRangos(), HttpStatus.OK);
 		}catch(ParqueaderoInternalServerErrorException e) {
+			LOGGER.error(e);
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -55,6 +59,7 @@ public class ParqueaderoControladorRest {
 					, HttpStatus.OK);
 		} catch (VehiculoBadRequestException | VehiculoYaExisteException | 
 				ParqueaderoIngresoNoPosibleException | NullPointerException e) {
+			LOGGER.error(e);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -65,6 +70,7 @@ public class ParqueaderoControladorRest {
 			return new ResponseEntity<>(parqueaderoServicio.retirarVehiculo(idVehiculo)
 					, HttpStatus.OK);
 		}catch(ParqueaderoRetiroVehiculoNoPosibleException e) {
+			LOGGER.error(e);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -82,6 +88,7 @@ public class ParqueaderoControladorRest {
 			parqueaderoServicio.pagarParqueadero(idVehiculo);
 			return new ResponseEntity<>(JSONObject.quote(env.getProperty("controller.status.ok")), HttpStatus.OK);
 		}catch(CobroNoPosibleException e){
+			LOGGER.error(e);
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}

@@ -3,6 +3,7 @@ package com.co.ceiba.ceibaadn.servicio.impl;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 @Service
 public class CobroServicioImplementacion implements CobroServicio {
 
+	private static final Logger LOGGER = Logger.getLogger(CobroServicioImplementacion.class);
+	
 	public CobroServicioImplementacion(CobroRepositorio cobroRepositorio, VehiculoServicio vehiculoServicio,
 			FactoryVehiculo factoryVehiculo) {
 		this.cobroRepositorio = cobroRepositorio;
@@ -100,6 +103,7 @@ public class CobroServicioImplementacion implements CobroServicio {
 			guardarCobro(cobro);
 			return netoPagar;		
 		} catch(DateTimeParseException | CobroNoPosibleException e) {
+			LOGGER.error(e);
 			throw new CobroNoPosibleException();
 		}
 	}

@@ -26,7 +26,7 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 	@Autowired
 	private FactoryVehiculo factoryVehiculo;
 	
-	public static final Logger LOGGER = Logger.getLogger(VehiculoServicioImplementacion.class);
+	private static final Logger LOGGER = Logger.getLogger(VehiculoServicioImplementacion.class);
 	
 	public VehiculoServicioImplementacion(VehiculoRepositorio vehiculoRepositorio,
 			TipoVehiculoServicio tipoVehiculoServicio, FactoryVehiculo factoryVehiculo) {
@@ -69,7 +69,7 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 			vehiculo = guardarVehiculo(vehiculo);		
 			return vehiculo;		
 		} catch (VehiculoBadRequestException e) {
-			LOGGER.error(new VehiculoBadRequestException().getMessage(), e);
+			LOGGER.error(new VehiculoBadRequestException());
 			throw new VehiculoBadRequestException();
 		}	
 	}

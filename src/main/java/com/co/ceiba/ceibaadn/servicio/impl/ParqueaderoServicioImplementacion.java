@@ -54,9 +54,9 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	@Autowired
 	ModelToDto modelToDto;
 	
-	public static final String ERROR_ARCHIVO_PROPIEDADES = "Fallo al intentar cargar valores desde archivo de propiedades";
+	private static final String ERROR_ARCHIVO_PROPIEDADES = "Fallo al intentar cargar valores desde archivo de propiedades";
 	
-	public static final Logger LOGGER = Logger.getLogger(ParqueaderoServicioImplementacion.class);
+	private static final Logger LOGGER = Logger.getLogger(ParqueaderoServicioImplementacion.class);
 	
 	@Override
 	public Set<VehiculoDto> actualizarRangos() {
@@ -92,9 +92,9 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	public Set<VehiculoDto> ingresarVehiculo(VehiculoDto vehiculoDto) {
 		try {
 			actualizarRangos();
-			if(vehiculoDto.getPlaca() == null || vehiculoDto.getPlaca().equals("") 
+			if(vehiculoDto.getPlaca().equals("") || vehiculoDto.getTipoVehiculo().equals("")
 					|| vehiculoDto.getTipoVehiculo() == null 
-					|| vehiculoDto.getTipoVehiculo().equals("")) {
+					|| vehiculoDto.getPlaca() == null) {
 				throw new VehiculoBadRequestException();
 			}
 			verificarVehiculoEnDiaNoHabilitado(vehiculoDto.getPlaca());
@@ -102,31 +102,36 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 			if( vehiculo == null) {
 				vehiculo = vehiculoServicio.guardarVehiculo(modelToDto.vehiculoDtoToVehiculo(vehiculoDto));
 				}
-			for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
-				if (capacidad.getTipoVehiculo().equals(vehiculo.getTipoVehiculo())) {
-					int contadorVehiculosTipo = 
-							(int) Parqueadero.getInstance().getVehiculos().stream()
-							.filter(vehiculoEnParqueadero -> vehiculoEnParqueadero.getTipoVehiculo().equals(capacidad.getTipoVehiculo())).count();
-					if (capacidad.getLimite() > contadorVehiculosTipo && !Parqueadero.getInstance().getVehiculos().contains(vehiculo)) {
-						Parqueadero.getInstance().getVehiculos().add(vehiculo);
-						Cobro cobro = new Cobro();
-						cobro.setEstado(EstadoCobro.PENDIENTE.toString());
-						cobro.setVehiculo(vehiculo);
-						cobro.setInicioParqueo(LocalDateTime.now());
-						cobroServicio.guardarCobro(cobro);
-						Parqueadero.getInstance().getCobros().add(cobro);
-						guardarCambios(Parqueadero.getInstance());	
-					}else {
-						throw new ParqueaderoIngresoNoPosibleException();
-					}
-				}
-			}
+			agregarCobroVehiculo(vehiculo);
 		}catch(ParqueaderoIngresoNoPosibleException e) {
+			LOGGER.error(e);
 			throw new ParqueaderoIngresoNoPosibleException();
 		}
 		return modelToDto.vehiculosToVehiculosDto(Parqueadero.getInstance().getVehiculos());
 	}
 
+	public void agregarCobroVehiculo(Vehiculo vehiculo) {
+		for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
+			if (capacidad.getTipoVehiculo().equals(vehiculo.getTipoVehiculo())) {
+				int contadorVehiculosTipo = 
+						(int) Parqueadero.getInstance().getVehiculos().stream()
+						.filter(vehiculoEnParqueadero -> vehiculoEnParqueadero.getTipoVehiculo().equals(capacidad.getTipoVehiculo())).count();
+				if (capacidad.getLimite() > contadorVehiculosTipo && !Parqueadero.getInstance().getVehiculos().contains(vehiculo)) {
+					Parqueadero.getInstance().getVehiculos().add(vehiculo);
+					Cobro cobro = new Cobro();
+					cobro.setEstado(EstadoCobro.PENDIENTE.toString());
+					cobro.setVehiculo(vehiculo);
+					cobro.setInicioParqueo(LocalDateTime.now());
+					cobroServicio.guardarCobro(cobro);
+					Parqueadero.getInstance().getCobros().add(cobro);
+					guardarCambios(Parqueadero.getInstance());	
+				}else {
+					throw new ParqueaderoIngresoNoPosibleException();
+				}
+			}
+		}
+	}
+	
 	@Override
 	public Set<VehiculoDto> retirarVehiculo(Long idVehiculo) {
 		actualizarRangos();
@@ -161,6 +166,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 			Parqueadero.getInstance().getCobros().add(cobro);
 			guardarCambios(Parqueadero.getInstance());
 		} catch(CobroNoPosibleException e) {
+			LOGGER.error(e);
 			throw new CobroNoPosibleException();
 		}
 	}
