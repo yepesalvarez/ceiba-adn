@@ -27,6 +27,13 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 	private FactoryVehiculo factoryVehiculo;
 	
 	public static final Logger LOGGER = Logger.getLogger(VehiculoServicioImplementacion.class);
+	
+	public VehiculoServicioImplementacion(VehiculoRepositorio vehiculoRepositorio,
+			TipoVehiculoServicio tipoVehiculoServicio, FactoryVehiculo factoryVehiculo) {
+		this.vehiculoRepositorio = vehiculoRepositorio;
+		this.tipoVehiculoServicio = tipoVehiculoServicio;
+		this.factoryVehiculo = factoryVehiculo;
+	}
 
 	@Override
 	public Vehiculo obtenerVehiculoPorPlaca(String placa) {
@@ -45,11 +52,11 @@ public class VehiculoServicioImplementacion implements VehiculoServicio {
 	
 	@Override
 	public Vehiculo guardarVehiculo(VehiculoDto vehiculoDto) {	
-		try {		
+		try {
 			String placa = vehiculoDto.getPlaca();
 			String tipoVehiculoString = vehiculoDto.getTipoVehiculo();
 			TipoVehiculo tipoVehiculo = tipoVehiculoServicio.obtenerPorNombre(tipoVehiculoString);
-			if ((placa.equals("") || placa.length() > 6) || (tipoVehiculoString.equals("")) || tipoVehiculo == null) {
+			if ((placa.equals("") || placa.length() > 6) || tipoVehiculo == null) {
 				throw new VehiculoBadRequestException();
 			}		
 			Vehiculo vehiculo;

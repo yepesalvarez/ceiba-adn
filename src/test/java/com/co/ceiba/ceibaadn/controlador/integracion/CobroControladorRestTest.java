@@ -13,17 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.repositorio.VehiculoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -53,7 +54,6 @@ public class CobroControladorRestTest {
 	private static final String KEY_PRECIO_DIA_CARRO = "vehiculos.carro.dia.precio";
 	private static final String KEY_LIMITE_CILINDRAJE = "vehiculos.moto.cilindraje,maximo";
 	private static final String KEY_RECARGO_CILINDRAJE = "vehiculos.moto.cilndraje.recargo";
-
 
 	@Test
 	public void testGenerarCobroBasicoHoras() throws Exception {

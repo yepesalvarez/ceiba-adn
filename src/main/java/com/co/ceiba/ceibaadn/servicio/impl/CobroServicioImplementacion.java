@@ -22,6 +22,29 @@ import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 @Service
 public class CobroServicioImplementacion implements CobroServicio {
 
+	public CobroServicioImplementacion(CobroRepositorio cobroRepositorio, VehiculoServicio vehiculoServicio,
+			FactoryVehiculo factoryVehiculo) {
+		this.cobroRepositorio = cobroRepositorio;
+		this.vehiculoServicio = vehiculoServicio;
+		this.factoryVehiculo = factoryVehiculo;
+	}
+
+	public int getDiasCobrar() {
+		return diasCobrar;
+	}
+
+	public void setDiasCobrar(int diasCobrar) {
+		this.diasCobrar = diasCobrar;
+	}
+
+	public int getHorasCobrar() {
+		return horasCobrar;
+	}
+
+	public void setHorasCobrar(int horasCobrar) {
+		this.horasCobrar = horasCobrar;
+	}
+
 	@Autowired
 	CobroRepositorio cobroRepositorio;
 	
