@@ -125,5 +125,57 @@ public class CobroControladorRestTest {
 		assertThatExceptionOfType(CobroNoPosibleException.class);
 		
 	}
+	
+	@Test
+	public void testGenerarCobroFechaInvalida() throws Exception {
+		
+		String placa = "KEL601";
+		VehiculoDto vehiculoDto = new VehiculoDto(placa, TIPO_VEHICULO_CARRO);
+		parqueaderoServicio.ingresarVehiculo(vehiculoDto);
+		Vehiculo vehiculo = vehiculoRepositorio.findByPlaca(placa);		
+		String fechaInvalida = "02/12/2019 05:40 PM";
+		 
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_COBRO).param(PARAMETRO_ID_VEHICULO, vehiculo.getId().toString())
+				.param(PARAMETRO_FECHA_FIN_PARQUEO, fechaInvalida);			
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		
+		assertEquals(400, result.getResponse().getStatus());
+		assertThatExceptionOfType(CobroNoPosibleException.class);
+		
+	}
+	
+	@Test
+	public void testGenerarCobroFechaFinParqueoVacia() throws Exception {
+		
+		String placa = "KEL602";
+		VehiculoDto vehiculoDto = new VehiculoDto(placa, TIPO_VEHICULO_CARRO);
+		parqueaderoServicio.ingresarVehiculo(vehiculoDto);
+		Vehiculo vehiculo = vehiculoRepositorio.findByPlaca(placa);		
+		String fechaInvalida = "";
+		 
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_COBRO).param(PARAMETRO_ID_VEHICULO, vehiculo.getId().toString())
+				.param(PARAMETRO_FECHA_FIN_PARQUEO, fechaInvalida);			
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		
+		assertEquals(400, result.getResponse().getStatus());
+		assertThatExceptionOfType(CobroNoPosibleException.class);
+		
+	}
+	
+	@Test
+	public void testGenerarCobroIdVehiculoVacio() throws Exception {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMATO_FECHA);
+		 
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_COBRO).param(PARAMETRO_ID_VEHICULO, "")
+				.param(PARAMETRO_FECHA_FIN_PARQUEO, LocalDateTime.now().plusHours(2).format(formatter));			
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		
+		assertEquals(400, result.getResponse().getStatus());
+		assertThatExceptionOfType(CobroNoPosibleException.class);
+		
+	}
+	
+
 
 }

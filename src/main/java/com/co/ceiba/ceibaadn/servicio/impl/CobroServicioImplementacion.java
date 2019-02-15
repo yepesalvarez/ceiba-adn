@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
@@ -46,7 +47,9 @@ public class CobroServicioImplementacion implements CobroServicio {
 	@Override
 	public double calcularCobro(Long idVehiculo, String fechaFinParqueoString) {
 		try {
-			
+			if (idVehiculo == null || fechaFinParqueoString == null) {
+				throw new CobroNoPosibleException();
+			}
 			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
 			if (vehiculo == null) {
 				throw new CobroNoPosibleException();
@@ -73,7 +76,7 @@ public class CobroServicioImplementacion implements CobroServicio {
 			cobro.setValorPagar(netoPagar);
 			guardarCobro(cobro);
 			return netoPagar;		
-		} catch(CobroNoPosibleException e) {
+		} catch(DateTimeParseException | CobroNoPosibleException e) {
 			throw new CobroNoPosibleException();
 		}
 	}
