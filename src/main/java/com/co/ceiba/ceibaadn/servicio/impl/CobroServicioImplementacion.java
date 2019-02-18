@@ -1,27 +1,29 @@
 package com.co.ceiba.ceibaadn.servicio.impl;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
-import com.co.ceiba.ceibaadn.dominio.Parqueadero;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.CobroRepositorio;
 import com.co.ceiba.ceibaadn.servicio.CobroServicio;
+import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
 @Service
 public class CobroServicioImplementacion implements CobroServicio {
+	
+	@Autowired
+	ParqueaderoServicio parqueaderoServicio;
 
 	private static final Logger LOGGER = Logger.getLogger(CobroServicioImplementacion.class);
 	
@@ -92,7 +94,7 @@ public class CobroServicioImplementacion implements CobroServicio {
 			}
 			calcularTiempo(horasParqueo);
 			double netoPagar = 0;
-			for (Capacidad capacidad : Parqueadero.getInstance().getCapacidades()) {
+			for (Capacidad capacidad : parqueaderoServicio.getParqueadero().getCapacidades()) {
 				if (vehiculo.getTipoVehiculo().equals(capacidad.getTipoVehiculo())) {
 					netoPagar += capacidad.getValorDia() * diasCobrar;
 					netoPagar += capacidad.getValorHora() * horasCobrar;
@@ -109,9 +111,9 @@ public class CobroServicioImplementacion implements CobroServicio {
 	}
 	
 	public void calcularTiempo(int horasBase) {
-		if (horasBase > Parqueadero.getInstance().getMinimoHorasDia()) {
+		if (horasBase > parqueaderoServicio.getParqueadero().getMinimoHorasDia()) {
 			this.diasCobrar++;
-			if(horasBase > Parqueadero.getInstance().getMaximoHorasDia()) {
+			if(horasBase > parqueaderoServicio.getParqueadero().getMaximoHorasDia()) {
 				int horasRestantes = horasBase - 24;
 				calcularTiempo(horasRestantes);
 			}else {

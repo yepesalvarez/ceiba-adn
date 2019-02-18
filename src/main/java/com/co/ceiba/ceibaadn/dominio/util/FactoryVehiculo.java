@@ -61,10 +61,10 @@ public class FactoryVehiculo {
 		capacidadesParqueadero.add(capacidadServicio.guardarCapacidad(capacidadTipoVehiculo));
 		
 		capacidadTipoVehiculo = new Capacidad();
-		capacidadTipoVehiculo.setLimite(Integer.parseInt(env.getProperty("vehiculos.carro.limite")));
+		capacidadTipoVehiculo.setLimite(Integer.parseInt(env.getProperty("vehiculos.moto.limite")));
 		capacidadTipoVehiculo.setTipoVehiculo(tipoVehiculoServicio.obtenerPorNombre(MOTO));
-		capacidadTipoVehiculo.setValorHora(Double.parseDouble(env.getProperty("vehiculos.carro.hora.precio")));
-		capacidadTipoVehiculo.setValorDia(Double.parseDouble(env.getProperty("vehiculos.carro.dia.precio")));
+		capacidadTipoVehiculo.setValorHora(Double.parseDouble(env.getProperty("vehiculos.moto.hora.precio")));
+		capacidadTipoVehiculo.setValorDia(Double.parseDouble(env.getProperty("vehiculos.moto.dia.precio")));
 		capacidadServicio.guardarCapacidad(capacidadTipoVehiculo);
 		capacidadesParqueadero.add(capacidadServicio.guardarCapacidad(capacidadTipoVehiculo));
 		

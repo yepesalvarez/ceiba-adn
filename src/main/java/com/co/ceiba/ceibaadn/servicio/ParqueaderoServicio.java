@@ -7,7 +7,8 @@ import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 
 public interface ParqueaderoServicio {
 	
-	void guardarCambios(Parqueadero parqueadero);
+	Parqueadero getParqueadero();
+	Parqueadero guardarParqueadero(Parqueadero parqueadero);
 	Set<VehiculoDto> actualizarRangos();
 	Set<VehiculoDto> obtenerVehiculosParqueados();
 	Set<VehiculoDto> ingresarVehiculo(VehiculoDto vehiculoDto);

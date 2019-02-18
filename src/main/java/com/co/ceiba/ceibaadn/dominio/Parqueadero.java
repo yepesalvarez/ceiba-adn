@@ -31,13 +31,8 @@ public class Parqueadero extends Entidad {
 	@Column(name = "maximo_horas_dia")
 	private int maximoHorasDia;
 	
-    private static final Parqueadero INSTANCIA_SINGLETON_PARQUEADERO = new Parqueadero();
-    private Parqueadero() {}
-    
-    public static Parqueadero getInstance() {
-      return INSTANCIA_SINGLETON_PARQUEADERO;
-    }
-	
+    public Parqueadero() {}
+    	
 	public void addCapacidad(Capacidad capacidad) {
 		this.capacidades.add(capacidad);
 		capacidad.setParqueadero(this);

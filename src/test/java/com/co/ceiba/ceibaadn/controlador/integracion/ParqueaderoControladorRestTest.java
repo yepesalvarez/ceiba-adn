@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.co.ceiba.ceibaadn.dominio.Parqueadero;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
@@ -281,7 +280,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		
 		assertEquals(200, result.getResponse().getStatus());
-		assertNotNull(Parqueadero.getInstance().getVehiculos());
+		assertNotNull(parqueaderoServicio.getParqueadero().getVehiculos());
 	}
 	
 	public MvcResult ingresarVehiculoTest(VehiculoDto vehiculo) throws Exception{
