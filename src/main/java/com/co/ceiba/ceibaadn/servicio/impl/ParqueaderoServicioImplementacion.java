@@ -10,11 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoIngresoNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoInternalServerErrorException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
@@ -22,6 +17,11 @@ import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.enums.DiasHabilitadosPlacaA;
 import com.co.ceiba.ceibaadn.dominio.enums.EstadoCobro;
+import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoIngresoNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoInternalServerErrorException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
 import com.co.ceiba.ceibaadn.repositorio.ParqueaderoRepositorio;
@@ -178,12 +178,18 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	
 	public void verificarVehiculoEnDiaNoHabilitado(String placaVehiculo) {
 		String diaActual = LocalDate.now().getDayOfWeek().name();
-		if(placaVehiculo.toUpperCase().startsWith("A") && 
-				(!diaActual.equals(DiasHabilitadosPlacaA.SUNDAY.toString()) 
-						|| !diaActual.equals(DiasHabilitadosPlacaA.MONDAY.toString()))) {
-			LOGGER.error(new ParqueaderoIngresoNoPosibleException().getMessage()
-					+ " vehiculo " + placaVehiculo + " dia actual " + diaActual);
-			throw new ParqueaderoIngresoNoPosibleException();	
+		if(placaVehiculo.startsWith("A") || placaVehiculo.startsWith("a")) {
+			boolean continuarComparacion = false;
+			int i = 0;
+			while (!continuarComparacion && i < DiasHabilitadosPlacaA.values().length) {
+				if(diaActual.equals(DiasHabilitadosPlacaA.values()[i].toString())) {
+					continuarComparacion = true;	
+				}
+				i++;
+			}
+			if(!continuarComparacion) {
+				throw new ParqueaderoIngresoNoPosibleException();
+			}
 		}
 	}
 }

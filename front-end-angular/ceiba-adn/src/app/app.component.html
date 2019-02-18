@@ -1,0 +1,102 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <div class="row">
+      <div class = "col">
+        <a class="navbar-brand">{{title}}</a>
+        <a class="navbar-brand">
+            <img src="../assets/imgs/logoCeibaSoftware-horizontal.png" width="200" height="100" alt="">
+        </a>
+        <h6>
+          <p class="lead">
+            Luis Fernando Yepes
+          </p>
+        </h6>
+      </div>
+        <div class = "col border">
+          <form #uploadForm="ngForm" id='vehiculoForm'>
+            <div class="form-group row">
+              <label for="placa" class="col-form-label">Ingresa la placa del vehiculo: </label>
+              <input type="text" maxlength="6" id="placa" name="placa" [(ngModel)]="vehiculoDto.placa" class="form-control mr-sm-2" placeholder="Placa Vehiculo" required>
+            </div>
+            <div class="container">
+                <div class="row">
+                  <div class="col">
+                      <label>Selecciona el tipo de vehiculo: </label>
+                  </div>
+                  <div class="col">
+                    <div class="form-group row">
+                      <div class="btn-group" role="group">  
+                        <button type="button" class="btn btn-warning" (click)="seleccionarMoto()">
+                          <i class="fas fa-motorcycle"></i>
+                        </button>
+                        <button type="button" class="btn btn-warning" (click)="seleccionarCarro()">
+                          <i class="fas fa-car-side"></i>
+                        </button>
+                      </div>
+                      <div class="form-group row" id="cilindraje-div" hidden>
+                        <label for="cilindraje" class="col-form-label">Ingresa cilindraje de la moto: </label>
+                        <input type="number" id="cilindraje" name="cilindraje" [(ngModel)]="vehiculoDto.cilindraje" class="form-control mr-sm-2" placeholder="Cilindraje moto">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <hr>
+            <div class="col">
+              <div class="form-group row">
+                <button class="btn btn-outline-secondary" type="submit" (click)="ingresarVehiculo()">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-car"></i>
+                    Ingresar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+  </div>
+</nav>
+<div *ngIf="mensajeError" class="alert alert-danger col-md-12" role="alert">
+    <strong>Error: </strong>{{mensajeError}}
+</div>
+<div *ngIf="mensajeCobrar" class="alert alert-info  col-md-12" role="alert">
+  <strong>Valor a cobrar : $</strong>{{mensajeCobrar}}
+</div>
+<div *ngIf="mensaje" class="alert alert-success  col-md-12" role="alert">
+  <strong></strong>{{mensaje}}
+</div>
+<div class="col-md-12" *ngIf="vehiculos">
+  <table class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col">Placa</th>
+				<th scope="col">Tipo Vehiculo</th>
+        <th scope="col">Fecha Ingreso</th>
+        <th scope="col">Generar cobro</th>
+        <th scope="col">Pagar</th>
+        <th scope="col">Retirar Vehiculo</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let vehiculo of vehiculos">
+				<td>{{vehiculo.placa}}</td>
+        <td>{{vehiculo.tipoVehiculo}}</td>
+        <td>{{vehiculo.fechaIngreso}}</td>
+        <td><button type="button" class="btn btn-info" (click)="cobrarParqueo(vehiculo.id)">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <i class="fas fa-cash-register"></i>
+        </button></td>
+        <td><button type="button" class="btn btn-success" (click)="pagarParqueo(vehiculo.id)">
+          <i class="fas fa-hand-holding-usd"></i>
+          <i class="far fa-credit-card"></i>
+        </button></td>
+        <td><button type="button" class="btn btn-danger" (click)="retirarVehiculo(vehiculo.id)">
+          <i class="fas fa-car"></i>
+          <i class="fas fa-sign-out-alt"></i>
+        </button></td>
+			</tr>
+		</tbody>
+  </table>
+</div>
+
+

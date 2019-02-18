@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,16 +18,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoIngresoNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoInternalServerErrorException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
+import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoIngresoNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoInternalServerErrorException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
+@CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 public class ParqueaderoControladorRest {
 	

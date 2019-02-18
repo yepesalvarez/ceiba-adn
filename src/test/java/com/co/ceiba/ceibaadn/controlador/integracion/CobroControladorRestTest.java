@@ -19,9 +19,9 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
+import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.repositorio.VehiculoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
 

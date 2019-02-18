@@ -14,12 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.Moto;
 import com.co.ceiba.ceibaadn.dominio.TipoVehiculo;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.VehiculoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.TipoVehiculoServicio;

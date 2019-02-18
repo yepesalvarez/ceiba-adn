@@ -4,11 +4,11 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.TipoVehiculo;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.VehiculoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.TipoVehiculoServicio;

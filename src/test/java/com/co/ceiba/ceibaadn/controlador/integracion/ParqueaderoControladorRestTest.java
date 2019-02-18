@@ -22,13 +22,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoBadRequestException;
-import com.co.ceiba.ceibaadn.controlador.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
+import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.TipoVehiculoRepositorio;
 import com.co.ceiba.ceibaadn.repositorio.VehiculoRepositorio;

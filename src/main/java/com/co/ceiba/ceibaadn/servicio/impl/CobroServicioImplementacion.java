@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
+import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.CobroRepositorio;
 import com.co.ceiba.ceibaadn.servicio.CobroServicio;

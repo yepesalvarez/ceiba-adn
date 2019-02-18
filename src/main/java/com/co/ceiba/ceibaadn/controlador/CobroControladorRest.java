@@ -4,14 +4,16 @@ import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.co.ceiba.ceibaadn.controlador.excepciones.CobroNoPosibleException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.servicio.CobroServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
+@CrossOrigin(origins = { "http://localhost:4200" })
 @RestController
 public class CobroControladorRest {
 	
