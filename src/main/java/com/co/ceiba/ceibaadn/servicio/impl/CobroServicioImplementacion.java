@@ -104,8 +104,9 @@ public class CobroServicioImplementacion implements CobroServicio {
 				}
 			}
 			cobro.setValorPagar(netoPagar);
+			cobro.setParqueadero(parqueaderoServicio.getParqueadero());
 			guardarCobro(cobro);
-			return netoPagar;		
+			return cobro.getValorPagar();		
 		} catch(DateTimeParseException | CobroNoPosibleException e) {
 			LOGGER.error(e);
 			throw new CobroNoPosibleException();

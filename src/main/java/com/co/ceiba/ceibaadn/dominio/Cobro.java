@@ -68,10 +68,6 @@ public class Cobro extends Entidad {
 		this.valorPagar = valorPagar;
 	}
 
-	public Parqueadero getParqueadero() {
-		return parqueadero;
-	}
-
 	public void setParqueadero(Parqueadero parqueadero) {
 		this.parqueadero = parqueadero;
 	}
