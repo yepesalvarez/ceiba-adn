@@ -54,7 +54,7 @@ public class ParqueaderoControladorRest {
 			return new ResponseEntity<>(parqueaderoServicio.ingresarVehiculo(vehiculoDto)
 					, HttpStatus.OK);
 		} catch (VehiculoBadRequestException | VehiculoYaExisteException | 
-				ParqueaderoIngresoNoPosibleException | NullPointerException e) {
+				ParqueaderoIngresoNoPosibleException e) {
 			LOGGER.error(e);
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}

@@ -135,11 +135,51 @@ public class ParqueaderoControladorRestTest {
 	}
 	
 	@Test
-    public void ingresarVehiculoTestE2EDtoNull() throws Exception {
+    public void ingresarVehiculoTestE2EDtoVacio() throws Exception {
 		
 		vehiculoDto = new VehiculoDto();
 		
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
+	
+		assertEquals(400, result.getResponse().getStatus());
+		assertThatExceptionOfType(VehiculoBadRequestException.class);
+     		
+	}
+	
+	@Test
+    public void ingresarVehiculoTestE2EPlacaNula() throws Exception {
+		
+		vehiculoDto = new VehiculoDto();
+		vehiculoDto.setPlaca(null);
+		vehiculoDto.setTipoVehiculo(TIPO_VEHICULO_OK_CARRO);
+		
+		MvcResult result = ingresarVehiculoTest(vehiculoDto);
+	
+		assertEquals(400, result.getResponse().getStatus());
+		assertThatExceptionOfType(VehiculoBadRequestException.class);
+     		
+	}
+	
+	@Test
+    public void ingresarVehiculoTestE2ETipoVehiculoNulo() throws Exception {
+		
+		vehiculoDto = new VehiculoDto();
+		vehiculoDto.setPlaca(PLACA_VALIDA);
+		vehiculoDto.setTipoVehiculo(null);
+		
+		MvcResult result = ingresarVehiculoTest(vehiculoDto);
+	
+		assertEquals(400, result.getResponse().getStatus());
+		assertThatExceptionOfType(VehiculoBadRequestException.class);
+     		
+	}
+	
+	@Test
+    public void ingresarVehiculoTestE2EDtoNull() throws Exception {
+			
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URL_INGRESAR_OBTENER_VEHICULO);
+		
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);

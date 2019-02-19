@@ -30,9 +30,7 @@ public class Parqueadero extends Entidad {
 	
 	@Column(name = "maximo_horas_dia")
 	private int maximoHorasDia;
-	
-    public Parqueadero() {}
-    	
+	    	
 	public void addCapacidad(Capacidad capacidad) {
 		this.capacidades.add(capacidad);
 		capacidad.setParqueadero(this);

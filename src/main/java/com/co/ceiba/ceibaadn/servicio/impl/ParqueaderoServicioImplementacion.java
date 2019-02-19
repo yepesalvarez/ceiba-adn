@@ -101,7 +101,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 			parqueadero = guardarParqueadero(parqueadero);			
 			return modelToDto.vehiculosToVehiculosDto(parqueadero.getVehiculos());
 		}catch(ParqueaderoInternalServerErrorException e) {
-			LOGGER.error(ERROR_ARCHIVO_PROPIEDADES);
+			LOGGER.error(ERROR_ARCHIVO_PROPIEDADES, e);
 			throw new ParqueaderoInternalServerErrorException();
 		}
 	}
@@ -110,9 +110,16 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	public Set<VehiculoDto> ingresarVehiculo(VehiculoDto vehiculoDto) {
 		try {
 			actualizarRangos();
-			if(vehiculoDto.getTipoVehiculo() == null || vehiculoDto.getPlaca() == null
-					|| vehiculoDto.getPlaca().equals("") || vehiculoDto.getTipoVehiculo().equals("")
-					|| vehiculoDto.getPlaca().length() > 6 || tipoVehiculoServicio.obtenerPorNombre(vehiculoDto.getTipoVehiculo()) == null) {
+			String stringVacio = "";
+			if(vehiculoDto == null || vehiculoDto.getTipoVehiculo() == null || vehiculoDto.getPlaca() == null) {
+				throw new VehiculoBadRequestException();
+			}
+			if(tipoVehiculoServicio.obtenerPorNombre(vehiculoDto.getTipoVehiculo()) == null)
+			{
+				throw new VehiculoBadRequestException();
+			}
+			if(stringVacio.equals(vehiculoDto.getPlaca()) || stringVacio.equals(vehiculoDto.getTipoVehiculo())
+					|| vehiculoDto.getPlaca().length() > 6 ) {
 				throw new VehiculoBadRequestException();
 			}
 			verificarVehiculoEnDiaNoHabilitado(vehiculoDto.getPlaca());	

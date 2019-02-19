@@ -31,8 +31,6 @@ public class FactoryVehiculo {
 	@Autowired
 	ModelMapper modelMapper;
 	
-	private FactoryVehiculo() {}
-	
 	public static final String CARRO = "carro";
 	public static final String MOTO = "moto";
 	
