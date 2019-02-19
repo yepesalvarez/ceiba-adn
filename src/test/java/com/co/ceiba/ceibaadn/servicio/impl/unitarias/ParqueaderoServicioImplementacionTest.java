@@ -94,6 +94,7 @@ public class ParqueaderoServicioImplementacionTest {
 	static final String KEY_HORAS_MAXIMO_DIA_PARQUEO = "horas.maximo.dia"; 
 	static final String HORAS_MAXIMO_DIA_PARQUEO = "24";
 	static final String LIMITE_MOTO_PARQUEADERO = "1";
+	static final String LIMITE_MOTO_PARQUEADERO_LLENO = "0";
 	static final String VALOR_HORA_MOTO_PARQUEADERO = "500";
 	static final String VALOR_DIA_MOTO_PARQUEADERO = "4000";
 	static final String GUARDADO_NO_POSIBLE = "Parámetros requeridos para la creación del vehículo incorrectos";
@@ -115,6 +116,7 @@ public class ParqueaderoServicioImplementacionTest {
 				capacidadServicio, modelToDto, tipoVehiculoServicio));
 		
 		parqueadero = new Parqueadero();
+		parqueadero.setId(1L);
 		parqueadero.setVehiculos(new HashSet<>());
 		List<Parqueadero> listParqueaderos = new ArrayList<>();
 		listParqueaderos.add(parqueadero);
@@ -181,16 +183,15 @@ public class ParqueaderoServicioImplementacionTest {
 	@Test
 	public void testIngresarVehiculoParqueaderoLleno() {
 		
+		capacidadesParqueadero.iterator().next().setLimite(Integer.parseInt(LIMITE_MOTO_PARQUEADERO_LLENO));
+				
 		actualizarRangosMock();
 		Mockito.when(vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca())).thenReturn(null);
 		Mockito.when(vehiculoServicio.guardarVehiculo(modelToDto.vehiculoDtoToVehiculo(vehiculoDto))).thenReturn(vehiculo);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
 		Mockito.when(tipoVehiculoServicio.obtenerPorNombre(TIPO_VEHICULO_VALIDO)).thenReturn(tipoVehiculo);
 		Mockito.when(modelToDto.vehiculosToVehiculosDto(parqueadero.getVehiculos())).thenReturn(vehiculosDto);	
-		
-		parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto);
-		vehiculoDto.setPlaca(PLACA_VALIDA_OTRA);
-		
+			
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(INGRESO_NO_POSIBLE);
 		assertThatExceptionOfType(ParqueaderoIngresoNoPosibleException.class);
 		
