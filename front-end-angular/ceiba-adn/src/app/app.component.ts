@@ -68,6 +68,8 @@ export class AppComponent implements OnInit {
           response => {
           this.vehiculoDto.tipoVehiculo = null;
           this.vehiculos = response;
+          this.vehiculoDto.placa = null;
+          document.getElementById('cilindraje-div').hidden = true;
           }, error => {
             const errorMensaje = error as any;
             if (errorMensaje != null) {

@@ -42,12 +42,12 @@ public class ParqueaderoControladorRest {
 
 	private static final Logger LOGGER = Logger.getLogger(ParqueaderoControladorRest.class);
 	
-	@GetMapping(value = "/", produces = "application/json")
+	@GetMapping(value = "/")
 	public ResponseEntity<Set<VehiculoDto>> obtenerParqueadero() {
 			return new ResponseEntity<>(parqueaderoServicio.actualizarRangos(), HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/api/parqueadero", produces = "application/json")
+	@PostMapping(value = "/api/parqueadero")
 	public ResponseEntity<Set<VehiculoDto>> ingresarVehiculoParqueadero(@RequestBody VehiculoDto vehiculoDto) {
 		try {
 			parqueaderoServicio.actualizarRangos();
@@ -60,7 +60,7 @@ public class ParqueaderoControladorRest {
 		}
 	}
 	
-	@DeleteMapping(value = "/api/parqueadero/{idVehiculo}", produces = "application/json")
+	@DeleteMapping(value = "/api/parqueadero/{idVehiculo}")
 	public ResponseEntity<Set<VehiculoDto>> retirarVehiculo(@PathVariable ("idVehiculo") Long idVehiculo){
 		try {
 			return new ResponseEntity<>(parqueaderoServicio.retirarVehiculo(idVehiculo)
@@ -71,14 +71,14 @@ public class ParqueaderoControladorRest {
 		}
 	}
 	
-	@GetMapping(value = "/api/parqueadero", produces = "application/json")
+	@GetMapping(value = "/api/parqueadero")
 	public ResponseEntity<Set<VehiculoDto>> obtenerVehiculosEnParqueadero(){
 		parqueaderoServicio.actualizarRangos();
 		return new ResponseEntity<>(parqueaderoServicio.obtenerVehiculosParqueados()
 				, HttpStatus.OK);
 	}
 	
-	@PatchMapping(value = "/api/parqueadero", produces = "application/json")
+	@PatchMapping(value = "/api/parqueadero")
 	public ResponseEntity<String> pagarParqueadero(@RequestParam("idVehiculo") Long idVehiculo){
 		try {
 			parqueaderoServicio.pagarParqueadero(idVehiculo);
