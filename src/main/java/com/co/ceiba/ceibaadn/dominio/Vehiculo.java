@@ -12,7 +12,6 @@ import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @Table
@@ -90,13 +89,4 @@ public abstract class Vehiculo extends Entidad {
 	         .toHashCode();
 	   }
 
-	@Override
-	   public String toString()
-	   {
-	      return new ToStringBuilder(this)
-	         .append("Id: ", this.getId())
-	         .append("Tipo Vehiculo: ", this.getTipoVehiculo())
-	         .append("Placa: ", this.getPlaca())
-	         .toString();
-	   }
 }

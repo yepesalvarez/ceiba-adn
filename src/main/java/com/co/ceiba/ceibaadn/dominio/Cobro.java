@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @Table(name = "cobros")
@@ -117,19 +116,6 @@ public class Cobro extends Entidad {
 	         .append(this.getInicioParqueo())
 	         .append(this.getFinParqueo())
 	         .toHashCode();
-	   }
-
-	@Override
-	   public String toString()
-	   {
-	      return new ToStringBuilder(this)
-	         .append("Id: ", this.getId())
-	         .append("Estado: ", this.getEstado())
-	         .append("Vehiculo: ", this.getVehiculo())
-	         .append("Hora inicio: ", this.getInicioParqueo())
-	         .append("Hora fin: ", this.getFinParqueo())
-	         .append("Valor a pagar: ", this.getValorPagar())
-	         .toString();
 	   }
 
 }

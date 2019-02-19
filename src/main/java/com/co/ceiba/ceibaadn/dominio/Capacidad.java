@@ -10,7 +10,6 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @Table(name = "capacidades")
@@ -101,19 +100,6 @@ public class Capacidad extends Entidad{
 	         .append(this.getParqueadero())
 	         .append(this.getTipoVehiculo())
 	         .toHashCode();
-	   }
-
-	@Override
-	   public String toString()
-	   {
-	      return new ToStringBuilder(this)
-	         .append("Id: ", this.getId())
-	         .append("Tipo Vehiculo: ", this.getTipoVehiculo())
-	         .append("Parqueadero: ", this.getParqueadero())
-	         .append("Limite: ", this.getLimite())
-	         .append("Valor hora: ", this.getValorHora())
-	         .append("Valor dia: ", this.getValorDia())
-	         .toString();
 	   }
 
 }
