@@ -73,13 +73,11 @@ public abstract class Vehiculo extends Entidad {
 	         return true;
 	      }
 	      final Vehiculo otroVehiculo = (Vehiculo) obj;
-
 	      return new EqualsBuilder()
 	         .append(this.getId(), otroVehiculo.getId())
 	         .append(this.getPlaca(), otroVehiculo.getPlaca())
 	         .isEquals();
 	   }
-	
 	@Override
 	   public int hashCode()
 	   {

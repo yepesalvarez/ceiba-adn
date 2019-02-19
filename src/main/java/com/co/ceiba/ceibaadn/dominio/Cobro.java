@@ -83,15 +83,15 @@ public class Cobro extends Entidad {
 	@Override
 	   public boolean equals(Object obj)
 	   {
-	      if (!(obj instanceof Cobro))
-	      {
-	        return false;
-	      }
-	      if (this == obj)
-	      {
-	         return true;
-	      }
-	      final Cobro otroCobro = (Cobro) obj;
+			if (!(obj instanceof Cobro))
+			{
+				return false;
+			}
+			if (this == obj)
+			{
+				return true;
+			}
+			final Cobro otroCobro = (Cobro) obj;
 
 	      return new EqualsBuilder()
 	         .append(this.getId(), otroCobro.getId())

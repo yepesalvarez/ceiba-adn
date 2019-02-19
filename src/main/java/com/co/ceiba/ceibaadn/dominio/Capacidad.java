@@ -75,7 +75,7 @@ public class Capacidad extends Entidad{
 	@Override
 	   public boolean equals(Object obj)
 	   {
-	      if (!(obj instanceof Capacidad))
+		if (!(obj instanceof Capacidad))
 	      {
 	        return false;
 	      }

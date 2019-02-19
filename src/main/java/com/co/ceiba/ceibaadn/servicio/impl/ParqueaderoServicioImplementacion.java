@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
@@ -36,9 +35,6 @@ import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 @Service
 public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 
-	@Autowired
-	Environment env;
-	
 	@Autowired
 	ParqueaderoRepositorio parqueaderoRepositorio;
 	
@@ -71,10 +67,9 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 		return parqueadero;
 	}
 
-	public ParqueaderoServicioImplementacion(Environment env, ParqueaderoRepositorio parqueaderoRepositorio,
+	public ParqueaderoServicioImplementacion(ParqueaderoRepositorio parqueaderoRepositorio,
 			VehiculoServicio vehiculoServicio, CobroRepositorio cobroRepositorio, FactoryVehiculo factoryVehiculo,
 			CapacidadServicio capacidadServicio, ModelToDto modelToDto, TipoVehiculoServicio tipoVehiculoServicio) {
-		this.env = env;
 		this.parqueaderoRepositorio = parqueaderoRepositorio;
 		this.vehiculoServicio = vehiculoServicio;
 		this.cobroRepositorio = cobroRepositorio;
@@ -82,7 +77,6 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 		this.capacidadServicio = capacidadServicio;
 		this.modelToDto = modelToDto;
 		this.tipoVehiculoServicio = tipoVehiculoServicio;
-		
 	}
 
 	@Override
@@ -90,8 +84,8 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 		try {
 			inicializarParqueadero();
 			parqueadero = ((List<Parqueadero>) parqueaderoRepositorio.findAll()).stream().findFirst().orElse(new Parqueadero());
-			parqueadero.setMinimoHorasDia(Integer.parseInt(env.getProperty("horas.minimo.dia")));
-			parqueadero.setMaximoHorasDia(Integer.parseInt(env.getProperty("horas.maximo.dia")));		
+			parqueadero.setMinimoHorasDia(capacidadServicio.obtenerMinimoHorasDiaParqueo());
+			parqueadero.setMaximoHorasDia(capacidadServicio.obtenerMaximoHorasDiaParqueo());		
 			Set<Capacidad> capacidadesParqueadero = factoryVehiculo.getCapacidadesParqueadero();
 			for (Capacidad capacidad : capacidadesParqueadero) {
 				capacidad.setParqueadero(parqueadero);

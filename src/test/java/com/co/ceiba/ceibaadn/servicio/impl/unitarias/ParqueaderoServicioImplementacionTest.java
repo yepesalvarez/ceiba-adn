@@ -117,7 +117,7 @@ public class ParqueaderoServicioImplementacionTest {
 		
 		initMocks(this);
 				
-		parqueaderoServicioImplementacion = spy(new	ParqueaderoServicioImplementacion(env, parqueaderoRepositorio,
+		parqueaderoServicioImplementacion = spy(new	ParqueaderoServicioImplementacion(parqueaderoRepositorio,
 				vehiculoServicio, cobroRepositorio,factoryVehiculo,
 				capacidadServicio, modelToDto, tipoVehiculoServicio));
 		
