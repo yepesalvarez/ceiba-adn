@@ -26,9 +26,9 @@ import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
+import com.co.ceiba.ceibaadn.repositorio.CobroRepositorio;
 import com.co.ceiba.ceibaadn.repositorio.ParqueaderoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.CapacidadServicio;
-import com.co.ceiba.ceibaadn.servicio.CobroServicio;
 import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
 import com.co.ceiba.ceibaadn.servicio.TipoVehiculoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
@@ -46,7 +46,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	VehiculoServicio vehiculoServicio;
 	
 	@Autowired
-	CobroServicio cobroServicio;
+	CobroRepositorio cobroRepositorio;
 	
 	@Autowired
 	FactoryVehiculo factoryVehiculo;
@@ -72,12 +72,12 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 	}
 
 	public ParqueaderoServicioImplementacion(Environment env, ParqueaderoRepositorio parqueaderoRepositorio,
-			VehiculoServicio vehiculoServicio, CobroServicio cobroServicio, FactoryVehiculo factoryVehiculo,
+			VehiculoServicio vehiculoServicio, CobroRepositorio cobroRepositorio, FactoryVehiculo factoryVehiculo,
 			CapacidadServicio capacidadServicio, ModelToDto modelToDto, TipoVehiculoServicio tipoVehiculoServicio) {
 		this.env = env;
 		this.parqueaderoRepositorio = parqueaderoRepositorio;
 		this.vehiculoServicio = vehiculoServicio;
-		this.cobroServicio = cobroServicio;
+		this.cobroRepositorio = cobroRepositorio;
 		this.factoryVehiculo = factoryVehiculo;
 		this.capacidadServicio = capacidadServicio;
 		this.modelToDto = modelToDto;
@@ -147,7 +147,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 					cobro.setEstado(EstadoCobro.PENDIENTE.toString());
 					cobro.setVehiculo(vehiculo);
 					cobro.setInicioParqueo(LocalDateTime.now());
-					cobroServicio.guardarCobro(cobro);
+					cobroRepositorio.save(cobro);
 					parqueadero.getCobros().add(cobro);
 					guardarParqueadero(parqueadero);	
 				}else {
@@ -162,7 +162,7 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 		actualizarRangos();
 		Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorId(idVehiculo);
 		if (vehiculo == null || vehiculo.getParqueadero() == null
-				|| cobroServicio.obtenerCobroPorVehiculo(vehiculo).getEstado()
+				|| cobroRepositorio.findByVehiculo(vehiculo).getEstado()
 					.equals(EstadoCobro.PENDIENTE.toString())) {
 			throw new ParqueaderoRetiroVehiculoNoPosibleException();
 		}
@@ -186,9 +186,9 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 			if(vehiculo == null) {
 				throw new CobroNoPosibleException();
 			}
-			Cobro cobro = cobroServicio.obtenerCobroPorVehiculo(vehiculo);
+			Cobro cobro = cobroRepositorio.findByVehiculo(vehiculo);
 			cobro.setEstado(EstadoCobro.PAGADO.toString());
-			cobroServicio.guardarCobro(cobro);
+			cobroRepositorio.save(cobro);
 			parqueadero.getCobros().add(cobro);
 			guardarParqueadero(parqueadero);
 		} catch(CobroNoPosibleException e) {

@@ -34,9 +34,9 @@ import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
+import com.co.ceiba.ceibaadn.repositorio.CobroRepositorio;
 import com.co.ceiba.ceibaadn.repositorio.ParqueaderoRepositorio;
 import com.co.ceiba.ceibaadn.servicio.CapacidadServicio;
-import com.co.ceiba.ceibaadn.servicio.CobroServicio;
 import com.co.ceiba.ceibaadn.servicio.TipoVehiculoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 import com.co.ceiba.ceibaadn.servicio.impl.ParqueaderoServicioImplementacion;
@@ -50,7 +50,7 @@ public class ParqueaderoServicioImplementacionTest {
 	VehiculoServicio vehiculoServicio;
 	
 	@Mock
-	CobroServicio cobroServicio;
+	CobroRepositorio cobroRepositorio;
 	
 	@Mock
 	FactoryVehiculo factoryVehiculo;
@@ -111,7 +111,7 @@ public class ParqueaderoServicioImplementacionTest {
 		initMocks(this);
 				
 		parqueaderoServicioImplementacion = spy(new	ParqueaderoServicioImplementacion(env, parqueaderoRepositorio,
-				vehiculoServicio, cobroServicio,factoryVehiculo,
+				vehiculoServicio, cobroRepositorio,factoryVehiculo,
 				capacidadServicio, modelToDto, tipoVehiculoServicio));
 		
 		parqueadero = new Parqueadero();
@@ -228,7 +228,7 @@ public class ParqueaderoServicioImplementacionTest {
 		vehiculo.setParqueadero(null);
 		Mockito.when(tipoVehiculoServicio.obtenerPorNombre(TIPO_VEHICULO_VALIDO)).thenReturn(tipoVehiculo);
 		Mockito.when(vehiculoServicio.obtenerVehiculoPorPlaca(PLACA_VALIDA)).thenReturn(vehiculo);
-		Mockito.when(cobroServicio.guardarCobro(cobro)).thenReturn(cobro);
+		Mockito.when(cobroRepositorio.save(cobro)).thenReturn(cobro);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
 		Mockito.when(modelToDto.vehiculosToVehiculosDto(parqueadero.getVehiculos())).thenReturn(vehiculosDto);
 		
@@ -311,7 +311,7 @@ public class ParqueaderoServicioImplementacionTest {
 		vehiculo.setParqueadero(parqueadero);
 		Mockito.when(vehiculoServicio.obtenerVehiculoPorId(vehiculoDto.getId())).thenReturn(vehiculo);
 		cobro.setEstado(EstadoCobro.PAGADO.toString());
-		Mockito.when(cobroServicio.obtenerCobroPorVehiculo(vehiculo)).thenReturn(cobro);
+		Mockito.when(cobroRepositorio.findByVehiculo(vehiculo)).thenReturn(cobro);
 		Mockito.when(vehiculoServicio.guardarVehiculo((vehiculo))).thenReturn(vehiculo);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
 		vehiculosDto.remove(vehiculoDto);
@@ -328,7 +328,7 @@ public class ParqueaderoServicioImplementacionTest {
 		actualizarRangosMock();
 		vehiculo.setParqueadero(parqueadero);
 		Mockito.when(vehiculoServicio.obtenerVehiculoPorId(vehiculoDto.getId())).thenReturn(vehiculo);
-		Mockito.when(cobroServicio.obtenerCobroPorVehiculo(vehiculo)).thenReturn(cobro);
+		Mockito.when(cobroRepositorio.findByVehiculo(vehiculo)).thenReturn(cobro);
 		Mockito.when(vehiculoServicio.guardarVehiculo((vehiculo))).thenReturn(vehiculo);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
 		vehiculosDto.remove(vehiculoDto);
@@ -368,17 +368,17 @@ public class ParqueaderoServicioImplementacionTest {
 	public void testPagarParqueaderoOk() {
 		actualizarRangosMock();
 		Mockito.when(vehiculoServicio.obtenerVehiculoPorId(vehiculoDto.getId())).thenReturn(vehiculo);
-		Mockito.when(cobroServicio.obtenerCobroPorVehiculo(vehiculo)).thenReturn(cobro);
+		Mockito.when(cobroRepositorio.findByVehiculo(vehiculo)).thenReturn(cobro);
 		cobro.setEstado(EstadoCobro.PAGADO.toString());
-		Mockito.when(cobroServicio.guardarCobro(cobro)).thenReturn(cobro);
+		Mockito.when(cobroRepositorio.save(cobro)).thenReturn(cobro);
 		parqueadero.getCobros().add(cobro);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
 		
 		parqueaderoServicioImplementacion.pagarParqueadero(vehiculoDto.getId());
 		
 		assertTrue(parqueaderoServicioImplementacion.getParqueadero().getCobros().contains(cobro));
-		assertNotNull(cobroServicio.obtenerCobroPorVehiculo(vehiculo));
-		assertTrue(cobroServicio.obtenerCobroPorVehiculo(vehiculo).getEstado().equals(EstadoCobro.PAGADO.toString()));
+		assertNotNull(cobroRepositorio.findByVehiculo(vehiculo));
+		assertTrue(cobroRepositorio.findByVehiculo(vehiculo).getEstado().equals(EstadoCobro.PAGADO.toString()));
 				
 	}
 	

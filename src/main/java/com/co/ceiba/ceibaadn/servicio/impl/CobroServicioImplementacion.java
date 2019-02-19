@@ -25,13 +25,26 @@ public class CobroServicioImplementacion implements CobroServicio {
 	@Autowired
 	ParqueaderoServicio parqueaderoServicio;
 
+	@Autowired
+	CobroRepositorio cobroRepositorio;
+	
+	@Autowired
+	VehiculoServicio vehiculoServicio;
+	
+	@Autowired
+	FactoryVehiculo factoryVehiculo;
+	
+	private int diasCobrar = 0;
+	private int horasCobrar = 0;
+	
 	private static final Logger LOGGER = Logger.getLogger(CobroServicioImplementacion.class);
 	
 	public CobroServicioImplementacion(CobroRepositorio cobroRepositorio, VehiculoServicio vehiculoServicio,
-			FactoryVehiculo factoryVehiculo) {
+			FactoryVehiculo factoryVehiculo, ParqueaderoServicio parqueaderoServicio) {
 		this.cobroRepositorio = cobroRepositorio;
 		this.vehiculoServicio = vehiculoServicio;
 		this.factoryVehiculo = factoryVehiculo;
+		this.parqueaderoServicio = parqueaderoServicio;
 	}
 
 	public int getDiasCobrar() {
@@ -50,17 +63,6 @@ public class CobroServicioImplementacion implements CobroServicio {
 		this.horasCobrar = horasCobrar;
 	}
 
-	@Autowired
-	CobroRepositorio cobroRepositorio;
-	
-	@Autowired
-	VehiculoServicio vehiculoServicio;
-	
-	@Autowired
-	FactoryVehiculo factoryVehiculo;
-	
-	private int diasCobrar = 0;
-	private int horasCobrar = 0;
 	
 	@Override
 	public Cobro guardarCobro(Cobro cobro) {
@@ -114,10 +116,10 @@ public class CobroServicioImplementacion implements CobroServicio {
 		if (horasBase > parqueaderoServicio.getParqueadero().getMinimoHorasDia()) {
 			this.diasCobrar++;
 			if(horasBase > parqueaderoServicio.getParqueadero().getMaximoHorasDia()) {
-				int horasRestantes = horasBase - 24;
+				int horasRestantes = horasBase - parqueaderoServicio.getParqueadero().getMaximoHorasDia();
 				calcularTiempo(horasRestantes);
 			}else {
-				this.horasCobrar = 24 - horasBase;
+				this.horasCobrar = parqueaderoServicio.getParqueadero().getMaximoHorasDia() - horasBase;
 			}
 		}else {
 			this.horasCobrar = horasBase;

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoIngresoNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoInternalServerErrorException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
@@ -45,12 +44,7 @@ public class ParqueaderoControladorRest {
 	
 	@GetMapping(value = "/", produces = "application/json")
 	public ResponseEntity<Set<VehiculoDto>> obtenerParqueadero() {
-		try {
 			return new ResponseEntity<>(parqueaderoServicio.actualizarRangos(), HttpStatus.OK);
-		}catch(ParqueaderoInternalServerErrorException e) {
-			LOGGER.error(e);
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
 	
 	@PostMapping(value = "/api/parqueadero", produces = "application/json")
