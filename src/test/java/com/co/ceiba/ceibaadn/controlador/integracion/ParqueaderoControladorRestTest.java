@@ -117,7 +117,7 @@ public class ParqueaderoControladorRestTest {
 	
 		assertEquals(400, result.getResponse().getStatus());
 		assertThatExceptionOfType(VehiculoBadRequestException.class);
-		assertNull(vehiculoRepositorio.findById(vehiculoDto.getId()).orElse(null));
+		assertNull(vehiculoRepositorio.findByPlaca(vehiculoDto.getPlaca()));
      		
 	}
 	
