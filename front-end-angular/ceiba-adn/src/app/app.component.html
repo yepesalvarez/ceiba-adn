@@ -26,10 +26,10 @@
                   <div class="col">
                     <div class="form-group row">
                       <div class="btn-group" role="group">  
-                        <button type="button" class="btn btn-warning" (click)="seleccionarMoto()">
+                        <button type="button" class="btn btn-warning" id="moto-button" (click)="seleccionarMoto()">
                           <i class="fas fa-motorcycle"></i>
                         </button>
-                        <button type="button" class="btn btn-warning" (click)="seleccionarCarro()">
+                        <button type="button" class="btn btn-warning" id="carro-button" (click)="seleccionarCarro()">
                           <i class="fas fa-car-side"></i>
                         </button>
                       </div>
@@ -44,7 +44,7 @@
             <hr>
             <div class="col">
               <div class="form-group row">
-                <button class="btn btn-outline-secondary" type="submit" (click)="ingresarVehiculo()">
+                <button class="btn btn-outline-secondary" id="ingresar-button" type="submit" (click)="ingresarVehiculo()">
                     <i class="fas fa-plus"></i>
                     <i class="fas fa-car"></i>
                     Ingresar
@@ -66,7 +66,7 @@
   <strong></strong>{{mensaje}}
 </div>
 <div class="col-md-12" *ngIf="vehiculos">
-  <table class="table table-striped">
+  <table class="table table-striped" >
 		<thead>
 			<tr>
 				<th scope="col">Placa</th>
@@ -78,7 +78,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr *ngFor="let vehiculo of vehiculos">
+			<tr *ngFor="let vehiculo of vehiculos" name = "nuevo-vehiculo" id = "{{vehiculo.placa}}">
 				<td>{{vehiculo.placa}}</td>
         <td>{{vehiculo.tipoVehiculo}}</td>
         <td>{{vehiculo.fechaIngreso}}</td>
