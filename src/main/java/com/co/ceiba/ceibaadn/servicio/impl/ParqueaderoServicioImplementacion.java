@@ -21,7 +21,7 @@ import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoInternalServerErrorException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
@@ -106,15 +106,15 @@ public class ParqueaderoServicioImplementacion implements ParqueaderoServicio {
 			actualizarRangos();
 			String stringVacio = "";
 			if(vehiculoDto == null || vehiculoDto.getTipoVehiculo() == null || vehiculoDto.getPlaca() == null) {
-				throw new VehiculoBadRequestException();
+				throw new VehiculoIngresoNoPosibleException();
 			}
 			if(tipoVehiculoServicio.obtenerPorNombre(vehiculoDto.getTipoVehiculo()) == null)
 			{
-				throw new VehiculoBadRequestException();
+				throw new VehiculoIngresoNoPosibleException();
 			}
 			if(stringVacio.equals(vehiculoDto.getPlaca()) || stringVacio.equals(vehiculoDto.getTipoVehiculo())
 					|| vehiculoDto.getPlaca().length() > 6 ) {
-				throw new VehiculoBadRequestException();
+				throw new VehiculoIngresoNoPosibleException();
 			}
 			verificarVehiculoEnDiaNoHabilitado(vehiculoDto.getPlaca());	
 			Vehiculo vehiculo = vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca());

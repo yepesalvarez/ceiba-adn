@@ -2,12 +2,9 @@ package com.co.ceiba.ceibaadn.controlador;
 
 import java.util.Set;
 
-import org.jboss.logging.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
-import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoIngresoNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.servicio.ParqueaderoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 
@@ -39,54 +31,33 @@ public class ParqueaderoControladorRest {
 	
 	@Autowired
 	VehiculoServicio vehiculoServicio;
-
-	private static final Logger LOGGER = Logger.getLogger(ParqueaderoControladorRest.class);
 	
 	@GetMapping(value = "/")
-	public ResponseEntity<Set<VehiculoDto>> obtenerParqueadero() {
-			return new ResponseEntity<>(parqueaderoServicio.actualizarRangos(), HttpStatus.OK);
+	public Set<VehiculoDto> obtenerParqueadero() {
+		return parqueaderoServicio.actualizarRangos();
 	}
 	
 	@PostMapping(value = "/api/parqueadero")
-	public ResponseEntity<Set<VehiculoDto>> ingresarVehiculoParqueadero(@RequestBody VehiculoDto vehiculoDto) {
-		try {
-			parqueaderoServicio.actualizarRangos();
-			return new ResponseEntity<>(parqueaderoServicio.ingresarVehiculo(vehiculoDto)
-					, HttpStatus.OK);
-		} catch (VehiculoBadRequestException | VehiculoYaExisteException | 
-				ParqueaderoIngresoNoPosibleException e) {
-			LOGGER.error(e);
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	public Set<VehiculoDto> ingresarVehiculoParqueadero(@RequestBody VehiculoDto vehiculoDto) {
+		parqueaderoServicio.actualizarRangos();
+		return parqueaderoServicio.ingresarVehiculo(vehiculoDto);
 	}
 	
 	@DeleteMapping(value = "/api/parqueadero/{idVehiculo}")
-	public ResponseEntity<Set<VehiculoDto>> retirarVehiculo(@PathVariable ("idVehiculo") Long idVehiculo){
-		try {
-			return new ResponseEntity<>(parqueaderoServicio.retirarVehiculo(idVehiculo)
-					, HttpStatus.OK);
-		}catch(ParqueaderoRetiroVehiculoNoPosibleException e) {
-			LOGGER.error(e);
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+	public Set<VehiculoDto> retirarVehiculo(@PathVariable ("idVehiculo") Long idVehiculo){
+		return parqueaderoServicio.retirarVehiculo(idVehiculo);
 	}
 	
 	@GetMapping(value = "/api/parqueadero")
-	public ResponseEntity<Set<VehiculoDto>> obtenerVehiculosEnParqueadero(){
+	public Set<VehiculoDto> obtenerVehiculosEnParqueadero(){
 		parqueaderoServicio.actualizarRangos();
-		return new ResponseEntity<>(parqueaderoServicio.obtenerVehiculosParqueados()
-				, HttpStatus.OK);
+		return parqueaderoServicio.obtenerVehiculosParqueados();
 	}
 	
 	@PatchMapping(value = "/api/parqueadero")
-	public ResponseEntity<String> pagarParqueadero(@RequestParam("idVehiculo") Long idVehiculo){
-		try {
-			parqueaderoServicio.pagarParqueadero(idVehiculo);
-			return new ResponseEntity<>(JSONObject.quote(env.getProperty("controller.status.ok")), HttpStatus.OK);
-		}catch(CobroNoPosibleException e){
-			LOGGER.error(e);
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+	public String pagarParqueadero(@RequestParam("idVehiculo") Long idVehiculo){
+		parqueaderoServicio.pagarParqueadero(idVehiculo);
+		return JSONObject.quote(env.getProperty("controller.status.ok"));
 	}
 	
 }

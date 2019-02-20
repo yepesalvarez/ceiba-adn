@@ -30,7 +30,7 @@ import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.enums.EstadoCobro;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.dominio.util.ModelToDto;
@@ -267,7 +267,7 @@ public class ParqueaderoServicioImplementacionTest {
 		actualizarRangosMock();
 		
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(GUARDADO_NO_POSIBLE);
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		
 	}
 	
@@ -278,7 +278,7 @@ public class ParqueaderoServicioImplementacionTest {
 		actualizarRangosMock();
 		
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(GUARDADO_NO_POSIBLE);
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		
 	}
 	
@@ -289,7 +289,7 @@ public class ParqueaderoServicioImplementacionTest {
 		actualizarRangosMock();
 		
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(GUARDADO_NO_POSIBLE);
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		
 	}
 	
@@ -300,7 +300,7 @@ public class ParqueaderoServicioImplementacionTest {
 		actualizarRangosMock();
 		
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(GUARDADO_NO_POSIBLE);
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		
 	}
 	
@@ -311,7 +311,7 @@ public class ParqueaderoServicioImplementacionTest {
 		actualizarRangosMock();
 		
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(GUARDADO_NO_POSIBLE);
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		
 	}
 	
@@ -323,7 +323,7 @@ public class ParqueaderoServicioImplementacionTest {
 		Mockito.when(tipoVehiculoServicio.obtenerPorNombre(TIPO_VEHICULO_NO_VALIDO)).thenReturn(null);
 		
 		assertThatThrownBy(() -> parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto)).hasMessage(GUARDADO_NO_POSIBLE);
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		
 	}
 	

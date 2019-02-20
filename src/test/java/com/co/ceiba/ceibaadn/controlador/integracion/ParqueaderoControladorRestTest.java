@@ -26,7 +26,7 @@ import com.co.ceiba.ceibaadn.dominio.Vehiculo;
 import com.co.ceiba.ceibaadn.dominio.dtos.VehiculoDto;
 import com.co.ceiba.ceibaadn.dominio.excepciones.CobroNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.ParqueaderoRetiroVehiculoNoPosibleException;
-import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoBadRequestException;
+import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoIngresoNoPosibleException;
 import com.co.ceiba.ceibaadn.dominio.excepciones.VehiculoYaExisteException;
 import com.co.ceiba.ceibaadn.dominio.util.FactoryVehiculo;
 import com.co.ceiba.ceibaadn.repositorio.TipoVehiculoRepositorio;
@@ -116,7 +116,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		assertNull(vehiculoRepositorio.findByPlaca(vehiculoDto.getPlaca()));
      		
 	}
@@ -129,7 +129,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
 		assertNull(vehiculoRepositorio.findById(vehiculoDto.getId()).orElse(null));
      		
 	}
@@ -142,7 +142,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
      		
 	}
 	
@@ -156,7 +156,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
      		
 	}
 	
@@ -170,7 +170,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
      		
 	}
 	
@@ -182,7 +182,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
      		
 	}
 	
@@ -194,7 +194,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
      		
 	}
 	
@@ -206,7 +206,7 @@ public class ParqueaderoControladorRestTest {
 		MvcResult result = ingresarVehiculoTest(vehiculoDto);
 	
 		assertEquals(400, result.getResponse().getStatus());
-		assertThatExceptionOfType(VehiculoBadRequestException.class);
+		assertThatExceptionOfType(VehiculoIngresoNoPosibleException.class);
      		
 	}
 	
