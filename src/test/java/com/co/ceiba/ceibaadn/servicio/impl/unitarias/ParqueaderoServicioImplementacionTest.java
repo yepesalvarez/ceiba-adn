@@ -22,7 +22,6 @@ import org.springframework.mock.env.MockEnvironment;
 
 import com.co.ceiba.ceibaadn.dominio.Capacidad;
 import com.co.ceiba.ceibaadn.dominio.Cobro;
-import com.co.ceiba.ceibaadn.dominio.Moto;
 import com.co.ceiba.ceibaadn.dominio.Parqueadero;
 import com.co.ceiba.ceibaadn.dominio.TipoVehiculo;
 import com.co.ceiba.ceibaadn.dominio.Vehiculo;
@@ -40,6 +39,12 @@ import com.co.ceiba.ceibaadn.servicio.CapacidadServicio;
 import com.co.ceiba.ceibaadn.servicio.TipoVehiculoServicio;
 import com.co.ceiba.ceibaadn.servicio.VehiculoServicio;
 import com.co.ceiba.ceibaadn.servicio.impl.ParqueaderoServicioImplementacion;
+import com.co.ceiba.ceibaadn.testdatabuilder.CapacidadTestDataBuilder;
+import com.co.ceiba.ceibaadn.testdatabuilder.CobroTestDataBuilder;
+import com.co.ceiba.ceibaadn.testdatabuilder.ParqueaderoTestDataBuilder;
+import com.co.ceiba.ceibaadn.testdatabuilder.TipoVehiculoTestDataBuilder;
+import com.co.ceiba.ceibaadn.testdatabuilder.VehiculoDtoTestDataBuilder;
+import com.co.ceiba.ceibaadn.testdatabuilder.VehiculoTestDataBuilder;
 
 public class ParqueaderoServicioImplementacionTest {
 	
@@ -71,7 +76,6 @@ public class ParqueaderoServicioImplementacionTest {
 	
 	VehiculoDto vehiculoDto;
 	Vehiculo vehiculo;
-	Moto moto;
 	TipoVehiculo tipoVehiculoMoto;
 	TipoVehiculo tipoVehiculoCarro;
 	Set<VehiculoDto> vehiculosDto;
@@ -85,24 +89,16 @@ public class ParqueaderoServicioImplementacionTest {
 	Cobro cobro;
 	
 	static final String PLACA_VALIDA = "bsd234";
-	static final String PLACA_VALIDA_OTRA = "fbv899";
 	static final String PLACA_INVALIDA = "bsd2345";
 	static final String PLACA_INVALIDA_PICO_PLACA = "abc123";
 	static final String TIPO_VEHICULO_VALIDO_MOTO = "moto";
 	static final String TIPO_VEHICULO_VALIDO_CARRO = "carro";
 	static final String TIPO_VEHICULO_NO_VALIDO = "tren";
 	static final int CILINDRAJE_SIN_RECARGO = 150;
-	static final String KEY_HORAS_MINIMO_DIA_PARQUEO = "horas.minimo.dia"; 
-	static final String HORAS_MINIMO_DIA_PARQUEO = "9";
-	static final String KEY_HORAS_MAXIMO_DIA_PARQUEO = "horas.maximo.dia"; 
-	static final String HORAS_MAXIMO_DIA_PARQUEO = "24";
-	static final String LIMITE_MOTO_PARQUEADERO = "1";
-	static final String LIMITE_CARRO_PARQUEADERO = "1";
+	static final int LIMITE_CARRO_PARQUEADERO = 1;
 	static final String LIMITE_MOTO_PARQUEADERO_LLENO = "0";
-	static final String VALOR_HORA_MOTO_PARQUEADERO = "500";
-	static final String VALOR_DIA_MOTO_PARQUEADERO = "4000";
-	static final String VALOR_HORA_CARRO_PARQUEADERO = "1000";
-	static final String VALOR_DIA_CARRO_PARQUEADERO = "8000";
+	static final double VALOR_HORA_CARRO_PARQUEADERO = 1000;
+	static final double VALOR_DIA_CARRO_PARQUEADERO = 8000;
 	static final String GUARDADO_NO_POSIBLE = "Parámetros requeridos para la creación del vehículo incorrectos";
 	static final String VEHICULO_REPETIDO = "El vehículo que intenta crear ya existe";
 	static final String INGRESO_NO_POSIBLE = "Ingreso no posible. Parqueadero lleno, el vehículo esta en el parqueadero o su placa no esta habilitada para este dia";
@@ -111,90 +107,61 @@ public class ParqueaderoServicioImplementacionTest {
 	@Before
 	public void setUp() {
 		
-		env = new MockEnvironment();
-		env.setProperty(KEY_HORAS_MINIMO_DIA_PARQUEO, HORAS_MINIMO_DIA_PARQUEO);
-		env.setProperty(KEY_HORAS_MAXIMO_DIA_PARQUEO, HORAS_MAXIMO_DIA_PARQUEO);
-		
 		initMocks(this);
 				
 		parqueaderoServicioImplementacion = spy(new	ParqueaderoServicioImplementacion(parqueaderoRepositorio,
 				vehiculoServicio, cobroRepositorio,factoryVehiculo,
 				capacidadServicio, modelToDto, tipoVehiculoServicio));
 		
-		tipoVehiculoCarro = new TipoVehiculo();
-		tipoVehiculoCarro.setId(1L);
-		tipoVehiculoCarro.setNombre(TIPO_VEHICULO_VALIDO_CARRO);
+		VehiculoDtoTestDataBuilder vehiculoDtoTestDataBuilder = new VehiculoDtoTestDataBuilder();
+		vehiculoDto = vehiculoDtoTestDataBuilder.build();
+		vehiculosDto = new HashSet<>();
 		
-		tipoVehiculoMoto = new TipoVehiculo();
-		tipoVehiculoMoto.setId(2L);
-		tipoVehiculoMoto.setNombre(TIPO_VEHICULO_VALIDO_MOTO);
+		TipoVehiculoTestDataBuilder tipoVehiculoTestDataBuilder = new TipoVehiculoTestDataBuilder();
+		tipoVehiculoMoto = tipoVehiculoTestDataBuilder.build();
+		
+		VehiculoTestDataBuilder vehiculoTestDataBuilder = new VehiculoTestDataBuilder();
+		vehiculo = vehiculoTestDataBuilder.buildMoto(CILINDRAJE_SIN_RECARGO);
+		vehiculos = new HashSet<>();
+		
+		cobro = new CobroTestDataBuilder().build();
+		cobrosParqueadero = new HashSet<>();
+		
+		ParqueaderoTestDataBuilder parqueaderoTestDataBuilder = new ParqueaderoTestDataBuilder();
+		parqueadero = parqueaderoTestDataBuilder.build();
 		
 		capacidadesParqueadero = new HashSet<>();
-		
-		capacidadTipoVehiculoCarro = new Capacidad();
-		capacidadTipoVehiculoCarro.setId(1L);
-		capacidadTipoVehiculoCarro.setLimite(Integer.parseInt(LIMITE_CARRO_PARQUEADERO));
-		capacidadTipoVehiculoCarro.setTipoVehiculo(tipoVehiculoCarro);
-		capacidadTipoVehiculoCarro.setValorHora(Double.parseDouble(VALOR_HORA_CARRO_PARQUEADERO));
-		capacidadTipoVehiculoCarro.setValorDia(Double.parseDouble(VALOR_DIA_CARRO_PARQUEADERO));
-		capacidadesParqueadero.add(capacidadTipoVehiculoCarro);
-		
-		capacidadTipoVehiculoMOTO = new Capacidad();
-		capacidadTipoVehiculoMOTO.setId(2L);
-		capacidadTipoVehiculoMOTO.setLimite(Integer.parseInt(LIMITE_MOTO_PARQUEADERO));
-		capacidadTipoVehiculoMOTO.setTipoVehiculo(tipoVehiculoMoto);
-		capacidadTipoVehiculoMOTO.setValorHora(Double.parseDouble(VALOR_HORA_MOTO_PARQUEADERO));
-		capacidadTipoVehiculoMOTO.setValorDia(Double.parseDouble(VALOR_DIA_MOTO_PARQUEADERO));
+		CapacidadTestDataBuilder capacidadTestDataBuilder = new CapacidadTestDataBuilder();
+		capacidadTipoVehiculoMOTO = capacidadTestDataBuilder.build();
 		capacidadesParqueadero.add(capacidadTipoVehiculoMOTO);
-		
-		vehiculoDto = new VehiculoDto(PLACA_VALIDA, TIPO_VEHICULO_VALIDO_MOTO, CILINDRAJE_SIN_RECARGO);	
-		vehiculoDto.setId(10L);
-		vehiculoDto.setFechaIngreso(LocalDateTime.now());
-		
-		vehiculosDto = new HashSet<>();
-		vehiculosDto.add(vehiculoDto);
-		
-		moto = new Moto();
-		moto.setCilindraje(CILINDRAJE_SIN_RECARGO);
-		vehiculo = moto;
-		vehiculo.setPlaca(PLACA_VALIDA);
-		vehiculo.setTipoVehiculo(tipoVehiculoMoto);
-		vehiculo.setId(10L);
-		
-		vehiculos = new HashSet<>();
-		vehiculos.add(vehiculo);
-		
-		cobrosParqueadero = new HashSet<>();
-		cobro = new Cobro();
-		cobro.setId(10L);
-		cobro.setEstado(EstadoCobro.PENDIENTE.toString());
-		cobro.setInicioParqueo(LocalDateTime.now());
-		cobro.setVehiculo(vehiculo);
-		cobrosParqueadero.add(cobro);
-		
-		
-		parqueadero = new Parqueadero();
-		parqueadero.setId(1L);
-		parqueadero.setVehiculos(new HashSet<>());
-		List<Parqueadero> listParqueaderos = new ArrayList<>();
-		listParqueaderos.add(parqueadero);
-		parqueaderos = listParqueaderos;
-		parqueadero.setCobros(cobrosParqueadero);
+		tipoVehiculoCarro = tipoVehiculoTestDataBuilder.conNombre(TIPO_VEHICULO_VALIDO_CARRO).build();
+		capacidadTipoVehiculoCarro = capacidadTestDataBuilder
+				.conLimite(LIMITE_CARRO_PARQUEADERO)
+				.conTipoVehiculo(tipoVehiculoCarro)
+				.conValorDia(VALOR_DIA_CARRO_PARQUEADERO)
+				.conValorHora(VALOR_HORA_CARRO_PARQUEADERO)
+				.build();
+		capacidadesParqueadero.add(capacidadTipoVehiculoCarro);
 		parqueadero.setCapacidades(capacidadesParqueadero);
+		parqueadero.setCobros(cobrosParqueadero);
+		parqueadero.setVehiculos(vehiculos);
 		
+		List<Parqueadero> listaParqueaderos = new ArrayList<>();
+		listaParqueaderos.add(parqueadero);
+		parqueaderos = listaParqueaderos;
+			
 	}
 
 	@Test
 	public void testIngresarVehiculoOk() {
 		
 		actualizarRangosMock();
-		Mockito.when(tipoVehiculoServicio.obtenerPorNombre(TIPO_VEHICULO_VALIDO_MOTO)).thenReturn(tipoVehiculoMoto);
+		Mockito.when(tipoVehiculoServicio.obtenerPorNombre(vehiculoDto.getTipoVehiculo())).thenReturn(tipoVehiculoMoto);
 		Mockito.when(vehiculoServicio.obtenerVehiculoPorPlaca(vehiculoDto.getPlaca())).thenReturn(null);
 		Mockito.when(vehiculoServicio.guardarVehiculo(modelToDto.vehiculoDtoToVehiculo(vehiculoDto))).thenReturn(vehiculo);
+		Mockito.when(cobroRepositorio.save(cobro)).thenReturn(cobro);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
-		Mockito.when(modelToDto.vehiculosToVehiculosDto(parqueadero.getVehiculos())).thenReturn(vehiculosDto);	
-		
-		
+			
 		Set<VehiculoDto> resultado = parqueaderoServicioImplementacion.ingresarVehiculo(vehiculoDto);
 		
 		assertEquals(vehiculosDto, resultado);
@@ -336,7 +303,6 @@ public class ParqueaderoServicioImplementacionTest {
 		Mockito.when(cobroRepositorio.findByVehiculo(vehiculo)).thenReturn(cobro);
 		Mockito.when(vehiculoServicio.guardarVehiculo((vehiculo))).thenReturn(vehiculo);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
-		vehiculosDto.remove(vehiculoDto);
 		Mockito.when(modelToDto.vehiculosToVehiculosDto(parqueadero.getVehiculos())).thenReturn(vehiculosDto);
 
 		Set<VehiculoDto> resultado = parqueaderoServicioImplementacion.retirarVehiculo(vehiculoDto.getId());
@@ -407,10 +373,11 @@ public class ParqueaderoServicioImplementacionTest {
 	public void actualizarRangosMock() {
 		
 		Mockito.when((parqueaderoRepositorio.findAll())).thenReturn(parqueaderos);
-		Mockito.when(env.getProperty(KEY_HORAS_MINIMO_DIA_PARQUEO)).thenReturn(HORAS_MINIMO_DIA_PARQUEO);
-		Mockito.when(env.getProperty(KEY_HORAS_MAXIMO_DIA_PARQUEO)).thenReturn(HORAS_MAXIMO_DIA_PARQUEO);
+		Mockito.when(capacidadServicio.obtenerMinimoHorasDiaParqueo()).thenReturn(parqueadero.getMinimoHorasDia());
+		Mockito.when(capacidadServicio.obtenerMaximoHorasDiaParqueo()).thenReturn(parqueadero.getMaximoHorasDia());
 		Mockito.when(factoryVehiculo.getCapacidadesParqueadero()).thenReturn(capacidadesParqueadero);
 		Mockito.when(capacidadServicio.guardarCapacidad(capacidadTipoVehiculoMOTO)).thenReturn(capacidadTipoVehiculoMOTO);
+		Mockito.when(modelToDto.vehiculosToVehiculosDto(parqueadero.getVehiculos())).thenReturn(vehiculosDto);
 		Mockito.when(parqueaderoServicioImplementacion.guardarParqueadero(parqueadero)).thenReturn(parqueadero);
 		
 	}

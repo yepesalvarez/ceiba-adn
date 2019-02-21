@@ -37,6 +37,19 @@ public class VehiculoDto {
 		this.cilindraje = cilindraje;
 	}
 	
+	public VehiculoDto (String placa, String tipoVehiculo, String fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+	}
+	
+	public VehiculoDto (String placa, String tipoVehiculo, int cilindraje, String fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+		this.placa = placa;
+		this.tipoVehiculo = tipoVehiculo;
+		this.cilindraje = cilindraje;
+	}
+	
 	public Long getId() {
 		return id;
 	}
